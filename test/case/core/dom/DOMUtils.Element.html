@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+ <head>
+	<title>domUtils.Element</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!--qunit js -->
+	<script  src="../../../qunit/qunit.js" type="text/javascript"></script>
+	<link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet" />
+	<!--qunit js -->
+ </head>
+
+ <body>
+	<h1 id="qunit-header">domUtils.Element Test</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+    <div id="test">
+    </div>
+    <iframe id="ifr" src="javascript:''"></iframe>
+
+    <script src="../../../../src/editor.js" type="text/javascript"></script>
+    <script  src="../../../../src/core/utils.js" type="text/javascript"></script>
+    <script  src="../../../../src/core/browser.js" type="text/javascript"></script>
+    <script  src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script  src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script  src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+ </body>
+</html>
+<script>
+    module("domUtils.Element");
+    function getHTML(co) {
+
+		var h = co.innerHTML.toLowerCase();
+
+		h = h.replace(/[\r\n\t]/g, ''); // Remove line feeds and tabs
+		h = h.replace(/ (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"'); // Restore attribs on IE
+
+		return h;
+	}
+    var domUtils = baidu.editor.dom.domUtils,
+        div = document.getElementById('test');
+
+    test("breakParent", function(){
+
+        div.innerHTML = '<div>xxxx<b>aaaa</b>cccc</div>';
+        var child = div.firstChild.firstChild.nextSibling;
+
+        domUtils.breakParent(child,div.firstChild)
+        equals(getHTML(div),'<div>xxxx</div><b>aaaa</b><div>cccc</div>');
+
+        div.innerHTML = '<div>xxxx</div>';
+        domUtils.breakParent(div.firstChild.firstChild,div.firstChild);
+        equals(getHTML(div),'<div></div>xxxx<div></div>');
+
+        div.innerHTML = '<div><div>xxxx</div><b>ssss</b></div>';
+        domUtils.breakParent(div.firstChild.firstChild,div.firstChild);
+        equals(getHTML(div),'<div></div><div>xxxx</div><div><b>ssss</b></div>');
+
+        div.innerHTML = '<div><div>xxxx</div><b>ssss</b></div>';
+        domUtils.breakParent(div.firstChild.firstChild.firstChild,div.firstChild);
+        equals(getHTML(div),'<div><div></div></div>xxxx<div><div></div><b>ssss</b></div>');
+
+        div.innerHTML = '<div><div>xxxx</div><b><i>ssss</i>ddddd</b></div>';
+        domUtils.breakParent(div.firstChild.lastChild.firstChild.firstChild,div.firstChild);
+        equals(getHTML(div),'<div><div>xxxx</div><b><i></i></b></div>ssss<div><b><i></i>ddddd</b></div>');
+    });
+
+    test("trimWhiteTextNode", function(){
+        div.innerHTML = '';
+        var text = document.createTextNode('\n\r');
+        div.appendChild(text);
+        div.appendChild(document.createElement('span'));
+        div.appendChild(text.cloneNode(false));
+
+       domUtils.trimWhiteTextNode(div);
+       equals(div.childNodes.length,1);
+
+        div.innerHTML = '';
+        div.appendChild(document.createTextNode(''));
+        domUtils.trimWhiteTextNode(div);
+        equals(div.childNodes.length,0)
+    });
+
+    test("isEmptyInlineElement", function(){
+        div.innerHTML = '<b><i></i></b>';
+        ok(domUtils.isEmptyInlineElement(div.firstChild));
+        div.firstChild.insertBefore(document.createTextNode('\n'),div.firstChild.firstChild);
+        ok(domUtils.isEmptyInlineElement(div.firstChild));
+        div.firstChild.appendChild(document.createElement('span'));
+        ok(domUtils.isEmptyInlineElement(div.firstChild));
+        div.firstChild.appendChild(document.createTextNode('aa'));
+        ok(!domUtils.isEmptyInlineElement(div.firstChild));
+
+        div.innerHTML = '<b><span></span><i></i></b>';
+        ok(domUtils.isEmptyInlineElement(div.firstChild));
+
+         div.innerHTML = '<b>sdfsdf</b>';
+        ok(!domUtils.isEmptyInlineElement(div.firstChild));
+    });
+
+    test("mergSibling", function(){
+        div.innerHTML = '<b></b><b></b><i></i>';
+        domUtils.mergSibling(div.firstChild.nextSibling);
+        equals(getHTML(div),'<b></b><i></i>');
+
+        div.innerHTML = '<b id="a"></b><b></b><i></i>'
+         domUtils.mergSibling(div.firstChild.nextSibling);
+          equals(getHTML(div),'<b id="a"></b><b></b><i></i>');
+          div.innerHTML = '<b></b><b></b><i></i>';
+        domUtils.mergSibling(div.firstChild);
+        equals(getHTML(div),'<b></b><i></i>');
+
+         div.innerHTML = '<b>aaaa</b><b><i>dsfsf</i><b>se</b></b><b>bbb</b>';
+        domUtils.mergSibling(div.firstChild.nextSibling);
+        equals(getHTML(div),'<b>aaaa<i>dsfsf</i><b>se</b>bbb</b>');
+    });
+
+
+     test("isSameElement", function(){
+        div.innerHTML = '<b class="c"></b><b id="b"></b>';
+
+        ok(  !domUtils.isSameElement(div.firstChild,div.lastChild));
+
+        div.innerHTML = '<b id="c"></b><b id="b"></b>';
+
+        ok(  !domUtils.isSameElement(div.firstChild,div.lastChild));
+
+        div.innerHTML = '<b id="b" class="a"></b><b id="b"></b>';
+
+        ok(  !domUtils.isSameElement(div.firstChild,div.lastChild));
+        div.innerHTML = '<b id="b" ></b><b id="b"></b>';
+
+        ok(  domUtils.isSameElement(div.firstChild,div.lastChild));
+
+        div.innerHTML = '<b id="b" style="font-size:12px"></b><b id="b" style="font-size:13px" ></b>';
+
+        ok(  !domUtils.isSameElement(div.firstChild,div.lastChild));
+
+        div.innerHTML = '<a target="_blank" href="#"></a><a href="#" target="_blank"></a>';
+         
+        ok(  domUtils.isSameElement(div.firstChild,div.lastChild));
+    });
+
+     test("mergToParent", function(){
+        div.innerHTML = '<b>dsfsdf<b>AAAA</b>sdfsdf</b>';
+        domUtils.mergToParent(div.getElementsByTagName('b')[1]);
+        equals(getHTML(div),'<b>dsfsdfaaaasdfsdf</b>');
+
+         div.innerHTML = '<b><b>AAAA</b></b>';
+        domUtils.mergToParent(div.getElementsByTagName('b')[1]);
+        equals(getHTML(div),'<b>aaaa</b>');
+
+            div.innerHTML = '<span>sdsdsdf<span>1111</span></span>';
+        domUtils.mergToParent(div.getElementsByTagName('span')[1]);
+        equals(getHTML(div),'<span>sdsdsdf1111</span>');
+        div.innerHTML = '<span style="font-size:12px"><span style="color:red">1111</span></span>';
+         domUtils.mergToParent(div.getElementsByTagName('span')[1]);
+        equals(div.getElementsByTagName('span').length,1);
+        equals(div.firstChild.style.color,'red');
+         equals(div.firstChild.style.fontSize,'12px');
+
+          div.innerHTML = '<span style="font-size:12px">sdf<span style="color:red">1111</span></span>';
+           domUtils.mergToParent(div.getElementsByTagName('span')[1]);
+
+          equals(div.getElementsByTagName('span').length,2);
+        ok(!div.firstChild.style.color);
+         equals(div.firstChild.style.fontSize,'12px');
+    });
+
+     test("mergChild", function(){
+
+         div.innerHTML = 'sldjsd<span>xxxx</span><span aaa>bbb</span>';
+
+        domUtils.mergChild(div.getElementsByTagName('span')[0]);
+        equals(div.getElementsByTagName('span').length ,2);
+
+        div.innerHTML = "<b></b>"
+    });
+
+    test("removeAttributes", function (){
+        div.innerHTML = '<div id="x" disabled></div>';
+        domUtils.removeAttributes(div.firstChild, ['id', 'disabled']);
+        ok(!div.firstChild.getAttribute('id'));
+        ok(!div.firstChild.getAttribute('disabled'));
+    });
+
+    test("getComputedStyle", function (){
+        div.innerHTML = '<div style="height:10px"></div>';
+        equals(domUtils.getComputedStyle(div.firstChild, 'height'), '10px');
+    });
+
+    test("hasClass", function (){
+        div.innerHTML = '<div class=" a b c"></div>';
+        equals(domUtils.hasClass('a'), true);
+        equals(domUtils.hasClass('b'), true);
+        equals(domUtils.hasClass('c'), true);
+    });
+
+    test("removeClasses", function (){
+        div.innerHTML = '<div class=" a b c">';
+        domUtils.removeClasses(div.firstChild, ['b']);
+        equals(domUtils.hasClass(div.firstChild, 'a'), true);
+        equals(domUtils.hasClass(div.firstChild, 'b'), false);
+        equals(domUtils.hasClass(div.firstChild, 'c'), true);
+    });
+</script>

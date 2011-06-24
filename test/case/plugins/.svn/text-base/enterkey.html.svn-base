@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <title>enterkey</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+
+    <script src="../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../src/core/EventBase.js" type="text/javascript"></script>
+
+    <script src="../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Selection.js" type="text/javascript"></script>
+    <script src="../../../src/core/Editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+    <script src="../../../src/plugins/enterkey/enterkey.js" type="text/javascript"></script>
+</head>
+
+<body>
+<h1 id="qunit-header">enterkey</h1>
+
+<h2 id="qunit-banner"></h2>
+
+
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test" style="width:500px;height:500px;border:1px solid #ccc"></div>
+
+
+</body>
+</html>
+<script>
+    var editor = new baidu.editor.Editor({enterkey:'br'});
+    editor.render( 'test' );
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd,
+            range = new baidu.editor.dom.Range( document );
+
+    module( "enterkey" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+
+    function manualDeleteFillData() {
+        var fillData = baidu.editor.Editor.fillData;
+        fillData  && domUtils.remove( fillData );
+        baidu.editor.Editor.fillData = null;
+    }
+
+    //editor.setContent('<b><i>xxxx</i></b>')
+   // editor.setContent('<b><i>xxxx</i></b><table><tr><td>xxxx</td><td>xxxx</td></tr></table>')
+    editor.setContent('<b>xxxx</b><p>xxxx</p>')
+</script>

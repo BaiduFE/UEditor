@@ -1,0 +1,80 @@
+/* index  */
+
+.bananer{
+	height:240px;
+}
+.con{
+	height:358px;
+}
+.con-left{
+	width:620px;height:358px;
+	float:left;
+}
+.con-right{
+	width:220px;height:358px;
+	float:left;
+}
+
+.con-left-item{
+	width:510px;height:auto;margin:28px 0px 15px 0px;padding:26px 0 0 64px;line-height:18px;margin-bottom:15px;
+	background:url('../img/index-con-left-item.png') no-repeat 0px 0px;font-family:Arial;
+}
+.i-new{
+	
+}
+.i-mini{
+	background-position: 0px -200px;
+}
+.i-bezier{
+	background-position: 0px -400px;
+}
+
+.con-right-download{
+	margin:10px 0px;
+}
+.con-right-faq{
+	height:auto;
+	background:url('../img/index-con-right-faq.gif') no-repeat center top ;
+}
+.con-right-faq-title{
+	height:30px;line-height:30px;font-size:12px;font-weight:bold;text-align:center;color:#656565;
+}
+.con-right-faq-item{
+	width:187px;line-height:19px;margin:12px 0 0 11px;padding-left:10px;
+	background:url('../img/icons.gif') no-repeat -4px -40px;
+}
+.con-right-faq-item a{
+	color:#6384c9;text-decoration:none;
+}
+.con-right-faq-footer{
+	height:15px;
+	background:url('../img/index-con-right-faq.gif') no-repeat center bottom ;
+}
+.using{
+	height:76px;line-height:76px;text-indent:30px;position:relative;
+	background:url('../img/index-using.gif') no-repeat ;
+}
+.using-logs{
+	width:648px;height:50px;position:absolute;right:9px;top:14px;
+	background:url('../img/index-using-logs.jpg') no-repeat #f5f5f5;
+}
+.using-logs-item{
+	width:160px;height:50px;float:left;border-right:1px #c4c4c4 dashed;
+	background:url('../img/index-using-logs.jpg') no-repeat #f5f5f5;
+}
+.i-google{
+	
+}
+.i-sina{
+	background-position: 0px -50px;
+}
+.i-autodesk{
+	background-position: 0px -100px;
+}
+.i-opera{
+	background-position: 0px -150px;
+}
+.using-footer{
+	width:15px;height:76px;position:absolute;right:0px;top:0px;
+	background:url('../img/index-using.gif') no-repeat right;
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+ <head>
+	<title>Utils</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!--qunit js -->
+	<script type="text/javascript" src="../../qunit/qunit.js"></script>
+	<link media="screen" href="../../qunit/qunit.css" type="text/css" rel="stylesheet" />
+	<!--qunit js -->
+ </head>
+
+ <body>
+	<h1 id="qunit-header">Unit tests for DOM Range IE implementation</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+    <div id="test">&nbsp;sss</div>
+
+    <script type="text/javascript" src="../../../src/editor.js"></script>
+    <script type="text/javascript" src="../../../src/core/utils.js"></script>
+    <script>
+        module("Utils", {});
+
+        var utils = baidu.editor.utils;
+
+        test("trim", function(){
+            var s = ' sss ';
+            equals(utils.trim(s),'sss');
+            var div = document.getElementById('test');
+            equals(utils.trim(div.firstChild.nodeValue).length,4);
+        });
+
+        test('indexOf', function (){
+            var s = [1,2,3,4,5];
+            equals(utils.indexOf(s, 3), 2);
+            equals(utils.indexOf(s, 6), -1);
+            equals(utils.indexOf(s, 5), 4);
+            equals(utils.indexOf(s, 3, 3), -1);
+        });
+    </script>
+
+ </body>
+</html>

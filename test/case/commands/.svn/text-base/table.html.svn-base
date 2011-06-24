@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>table</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+ 
+    <script src="../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../src/core/EventBase.js" type="text/javascript"></script>
+
+    <script src="../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Selection.js" type="text/javascript"></script>
+    <script src="../../../src/core/Editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../../../src/plugins/table/table.js"></script>
+    <!--<script src="../../../src/commands/table.js" type="text/javascript"></script>-->
+    <!--<script src="../../../src/plugins/table/merge_cells.js" type="text/javascript"></script>-->
+</head>
+<body>
+    <div id = "test" style="height:400px; width:400px; float:left;">
+    </div>
+    <div style="float:left;">
+        <button id="mergeRight" onclick="editor.execCommand( 'mergeright' );">mergeRight</button><br/>
+        <button id="mergeDown" onclick="editor.execCommand( 'mergedown' );">mergeDown</button><br/>
+        <button id="splitCell" onclick="editor.execCommand( 'splittocells' );">split2Cells</button><br/>
+        <button id="insertRow" onclick="editor.execCommand( 'insertrow');">insertRow</button><br/>
+        <button id="insertCol" onclick="editor.execCommand( 'insertcol' );">insertCol</button><br/>
+        <button id="deleteRows" onclick="editor.execCommand( 'deleterow' );">deleteRows</button><br/>
+        <button id="deleteCols" onclick="editor.execCommand( 'deletecol' );">deleteCols</button><br/>
+        <button id="insertTable" onclick="editor.execCommand( 'inserttable',10,10 );">insertTable</button><br/>
+        <button id="deleteTable" onclick="editor.execCommand( 'deletetable' );">deleteTable</button><br/>
+        <button id="mergeCells" onclick="editor.execCommand( 'mergecells' );">mergecells</button><br/>
+        <button id="split2rows" onclick="editor.execCommand( 'splittorows' );">split2rows</button><br/>
+        <button id="split2cols" onclick="editor.execCommand( 'splittocols' );">split2cols</button><br/>
+    </div>
+
+    <script type="text/javascript">
+        num= 0;
+        var editor = new baidu.editor.Editor({
+            initialStyle : '.selected{background-color: #add8e6;}'
+        });
+        editor.render( 'test' );
+        var domUtils = baidu.editor.dom.domUtils,
+                dtd = baidu.editor.dom.dtd,
+                range = new baidu.editor.dom.Range( document );
+        module( "table" );
+        document.write();
+
+    </script>
+
+</body>
+</html>

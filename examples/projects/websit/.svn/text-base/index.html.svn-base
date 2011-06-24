@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>01-index</title>
+<link rel="stylesheet" href="css/public.css" type="text/css">
+<link rel="stylesheet" href="css/index.css" type="text/css">
+</head>
+<body>
+
+<div class="container">
+	<div class="languagebar">English | 简体中文</div>
+	<div class="head">
+		<div class="head-logo">
+			<img src="img/logo.png" />
+		</div>
+		<div class="head-nav">
+			<a class="head-nav-item" href="#" >Home<span class="footer"></span></a>
+			<a class="head-nav-item split" ></a>
+			<a class="head-nav-item" href="#" >Document<span class="footer"></span></a>
+			<a class="head-nav-item split" ></a>
+			<a class="head-nav-item" href="#" >Online Demo<span class="footer"></span></a>
+			<a class="head-nav-item split" ></a>
+			<a class="head-nav-item" href="#" >Download<span class="footer"></span></a>
+			<a class="head-nav-item split" ></a>
+			<a class="head-nav-item" href="#" >About UEditor<span class="footer"></span></a>
+		</div>
+	</div>
+	<div class="bananer">
+		<img src="img/bananer.jpg" />
+	</div>
+	<div class="con">
+		<div class="con-left">
+		
+			<div class="con-left-item">
+				he new Graphviz-based layout engine built into OmniGraffle 5 allows for faster and more varied automatic layout types.
+			</div>
+			<div class="con-left-item i-mini">
+				We've put the most common inspector controls at your fingertips with OmniGraffle 5's new mini-inspector. Change object size, location, fill, stroke and other key attributes right at the top of the document window.
+			</div>
+			<div class="con-left-item i-bezier">
+				Curves are beautiful and we've added even more in OmniGraffle 5 with the inclusion of Bézier lines. Add control points to your lines and then swing them around to create the sinuous lines you've always wanted. 
+			</div>
+			
+		
+		</div>
+		<div class="con-right">
+			<div class="con-right-download" >
+				<a href="#"><img src="img/index-download.gif"/></a>
+				</div>
+			<div class="con-right-faq" >
+				<div class="con-right-faq-title">
+					Frequently Asked Questions
+				</div>
+				<div class="con-right-faq-item">
+					<a href="#">he most common inspector controls at your?</a>
+				</div>
+				<div class="con-right-faq-item">
+					<a href="#">he most common inspector controls at your?</a>
+				</div>
+				<div class="con-right-faq-item">
+					<a href="#">he most common inspector controls at your?</a>
+				</div>
+				<div class="con-right-faq-item">
+					<a href="#">he most common inspector controls at your?</a>
+				</div>
+				<div class="con-right-faq-footer"></div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="using">Who is using UEditor?
+		<div class="using-logs">
+			<div class="using-logs-item"></div>
+			<div class="using-logs-item i-sina"></div>
+			<div class="using-logs-item i-autodesk"></div>
+			<div class="using-logs-item i-opera"></div>
+		</div>
+		<div class="using-footer"></div>
+	</div>
+	<div class="footer">
+		<a href="#">Home</a>   |   <a href="#">About Us</a>    |   <a href="#">Help</a>
+		<div class="footer-copyright">© 2003-2011 Baidu. All rights Reserved.</div>
+	</div>
+	
+</div>
+
+</body>
+</html>
+
+

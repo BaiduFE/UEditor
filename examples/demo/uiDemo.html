@@ -1,0 +1,372 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        var paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            //ui的基础库
+            'ui/ui.js',
+            'ui/uiutils.js',
+            'ui/uibase.js',
+            'ui/stateful.js',
+            //ui的类型
+            'ui/sparator.js',
+            'ui/mask.js',
+            'ui/popup.js',
+            'ui/colorpicker.js',
+            'ui/tablepicker.js',
+            'ui/stateful.js',
+            'ui/button.js',
+            'ui/splitbutton.js',
+            'ui/colorbutton.js',
+            'ui/tablebutton.js',
+            'ui/toolbar.js',
+            'ui/menu.js',
+            'ui/combox.js',
+            'ui/dialog.js',
+            'ui/menubutton.js'
+        ];
+        (function(){
+            var i = -1,baseURL = '../../src/',//基础路径
+                absolute;
+            while(i++ < paths.length-1){
+                absolute = baseURL + paths[i];
+                document.write("<script type='text/javascript' charset='utf-8' src='"+absolute+"'><\/script>");
+            }
+        })()
+    </script>
+    <link rel="stylesheet" type="text/css" href="../resources/EDITORUI.css"/>
+    <style type="text/css">
+        .edui-arrow{
+            background: url(../resources/images/icons.png) -741px 0;
+            _background: url(../resources/images/icons.png) -741px 0;
+            height: 20px;
+            width: 8px;
+            border-left: 1px solid #CCC;
+        }
+        .edui-splitbutton .edui-button-body,.edui-menubutton-body .edui-button-body{
+            width:20px;
+            height:20px;
+            background-image: url(../resources/images/icons.png);
+            background: url(../resources/images/icons.gif) -180px 0\9;
+        }
+        .edui-splitbutton .edui-state-hover .edui-splitbutton-body,
+        .edui-menubutton .edui-state-hover .edui-menubutton-body{
+            background-color: #B2BBD0;
+            border: 1px solid #0A246A;
+        }
+        .edui-splitbutton .edui-state-hover .edui-splitbutton-body .edui-arrow,
+        .edui-menubutton .edui-state-hover .edui-menubutton-body .edui-arrow{
+            border-left: 1px solid #0A246A;
+        }
+        /*button css*/
+        .aButton .edui-button-wrap .edui-button-body{
+            height: 20px;
+            width: 20px;
+            background-image: url(../resources/images/icons.png);
+            background: url(../resources/images/icons.gif) -180px 0\9;
+        }
+        /*combox css*/
+        .aCombox .edui-combox-body{
+            width:80px;
+            height:20px;
+            border:1px solid #ccc;
+        }
+        .aCombox .edui-combox-body .edui-button-body{
+            width: 65px;
+            font-size: 12px;
+            height: 20px;
+            line-height: 20px;
+            padding-left: 5px;
+            white-space: nowrap;
+        }
+        .edui-popup-body{
+            border:1px solid #CCC;
+        }
+        .edui-listitem-label{
+            min-width: 120px;
+            _width: 120px;
+            font-size: 12px;
+            height: 22px;
+            line-height: 22px;
+            padding-left: 5px;
+        }
+        /*color button*/
+        .aColorButton .edui-splitbutton-body{
+            height:20px;
+            border:1px solid #ccc;
+        }
+        .aColorButton .edui-button-body{
+            background-position: -720px 0;
+        }
+        .edui-colorpicker-colorcell {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #333;
+            display: block;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .edui-colorpicker-preview {
+            height: 20px;
+            border: 1px inset black;
+            margin-left: 2px;
+            width: 168px;
+            float: left;
+        }
+        .edui-colorpicker-nocolor {
+            float: right;
+            margin-right: 2px;
+            font-size: 12px;
+            line-height: 14px;
+            height: 14px;
+            border: 1px solid #333;
+            padding: 3px 5px;
+            cursor: pointer;
+        }
+        .edui-popup-content {
+            border: 1px solid gray;
+            background-color: white;
+            padding: 5px;
+        }
+        .edui-splitbutton-body .edui-button-body .edui-colorlump {
+            position: absolute;
+            overflow: hidden;
+            bottom: 1px;
+            left: 1px;
+            width: 18px;
+            height: 4px;
+        }
+        /*menubutton*/
+        .edui-menubutton-body .edui-button-body{
+            background-position: -80px 0;
+        }
+        .edui-menubutton  .edui-menubutton-body{
+            border:1px solid #CCC;
+        }
+        .edui-menuitem .edui-label {
+            font-size: 12px;
+            line-height: 22px;
+            height: 20px;
+            margin-left: 30px;
+            padding-right: 20px;
+        }
+        .edui-menuitem {
+            height: 20px;
+            _width: 150px;
+            min-width: 150px;
+            cursor: default;
+            vertical-align: top;
+        }
+        .edui-menu .edui-popup-content {
+            background-color: #F1F1F1;
+            padding: 3px;
+        }
+        .edui-menu-body .edui-state-hover {
+            padding: 0 !important;
+            border: 1px solid #aecff7;
+            background-color: #dbeef7;
+        }
+        .edui-menu-body .edui-menuitem {
+            padding: 1px;
+        }
+        /*dialog*/
+        .emoticon .edui-dialog-content {
+            width: 500px;
+            height: 310px;
+        }
+        .edui-dialog-body{
+            overflow:hidden;
+        }
+        .edui-dialog-modalmask {
+            opacity: 0.2;
+            filter: alpha(opacity=40);
+            background-color: black;
+            position: absolute;
+            z-index: 1999;
+        }
+        .edui-dialog {
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+<div id="aButton"></div>
+<div id="aCombox"></div>
+<div id="aColorButton"></div>
+<div id="aMenubutton"></div>
+<input type="button" onclick="dialog.open()" value="打开dialog"/>
+<script type="text/javascript" charset="utf-8">
+    //#button#
+    //创建button的按钮
+    var btn =  new baidu.editor.ui.Button({
+        className: 'aButton',
+        label : '',          //显示的内容
+        title: "aButton",           //悬停时显示
+        onclick: function (){
+            alert('aButton clicked!');
+        },
+        id : "aButton"
+    });
+    btn.render();
+    //#combox#
+    //内容列表
+    var FONT_MAP = {
+        '宋体': ['宋体', 'SimSun'],
+        '楷体': ['楷体', '楷体_GB2312', 'SimKai'],
+        '黑体': ['黑体', 'SimHei'],
+        '隶书': ['隶书', 'SimLi'],
+        'andale mono' : ['andale mono','times'],
+        'arial' : ['arial','helvetica','sans-serif'],
+        'arial black' : ['arial black','avant garde'],
+        'comic sans ms' : ['comic sans ms','sans-serif'],
+        'impact' : ['impact','chicago'],
+        'symbol' : ['symbol'],
+        'times new roman' : ['times new roman','times']
+    };
+    //内容显示list
+    var list = ['宋体', '楷体', '隶书', '黑体','andale mono','arial','arial black','comic sans ms','impact','symbol','times new roman'];
+    var items = [];
+    for (var i=0; i<list.length; i++) {
+        var font = list[i];
+        var fonts = FONT_MAP[font];
+        var value = '"' + font + '"';
+        var regex = new RegExp(font, 'i');
+        if (fonts) {
+            value = '"' + fonts.join('","') + '"';
+            regex = new RegExp(fonts.join('|'), 'i');
+        }
+        items.push({
+            label: font,
+            value: value,
+            regex: regex,
+            renderLabelHtml: function (){
+                return '<div class="edui-label %%-label" style="font-family:' +
+                    baidu.editor.utils.unhtml(this.value) + '">' + (this.label || '') + '</div>';
+            }
+        });
+    }
+    //创建combox控件
+    var aCombox = new baidu.editor.ui.Combox({
+        items: items,
+        id: "aCombox",
+        label:"combox",
+        onselect: function (t,index){
+        },
+        onbuttonclick: function (){
+            this.showPopup();
+        },
+        title: "combox",
+        className: 'aCombox',
+        indexByValue: function (value){
+            value = value.replace(/,.*/, '').replace(/"/g, '');
+            for (var i=0; i<this.items.length; i++) {
+                var item = this.items[i];
+                if (item.regex.test(value)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    });
+    aCombox.render();
+    //#colorbutton#
+    var colorBtn = new baidu.editor.ui.ColorButton({
+        className: 'aColorButton',
+        id:"aColorButton",
+        color: 'default',
+        title: "颜色选择",
+        onpickcolor: function (t, color){
+            
+        },
+        onpicknocolor: function (){
+            this.setColor('transparent');
+            this.color = 'default';
+        },
+        onbuttonclick: function (){
+            alert("点击button");
+        }
+    });
+    colorBtn.render();
+    //#menubutton#
+    var _onMenuClick = function(){
+        alert(this.value);
+    };
+    var listui = new baidu.editor.ui.MenuButton({
+        cmd : "InsertOrderedList",
+        title : "有序列表",
+        id : "aMenubutton",
+        items :
+            [{
+                label: '1,2,3...',
+                value: 'decimal',
+                onclick : _onMenuClick
+            },{
+                label: 'a,b,c ...',
+                value: 'lower-alpha',
+                onclick : _onMenuClick
+            },{
+                label: 'i,ii,iii...',
+                value: 'lower-roman',
+                onclick : _onMenuClick
+            },{
+                label: 'A,B,C',
+                value: 'upper-alpha',
+                onclick : _onMenuClick
+            },{
+                label: 'I,II,III...',
+                value: 'upper-roman',
+                onclick : _onMenuClick
+            }],
+        onbuttonclick: function (){
+            alert("button click");
+        }
+    });
+    listui.render();
+    //#dialog#
+    var dialog = new baidu.editor.ui.Dialog({
+        iframeUrl: "../../src/ui/dialogs/emoticon/emoticon.html",
+        autoReset: true,
+        draggable: true,
+        className: 'emoticon',
+        editor: baidu.editor,
+        title: "表情",
+        buttons: [{
+            className: 'edui-okbutton',
+            label: '确认',
+            onclick: function (){
+                dialog.close(true);
+            }
+        }, {
+            className: 'edui-cancelbutton',
+            label: '取消',
+            onclick: function (){
+                dialog.close(false);
+            }
+        }],
+        onok: function (){},
+        oncancel: function (){
+            if(baidu.editor.browser.ie)
+            baidu.editor.selection._bakIERange.select();
+        },
+        onclose: function (t, ok){
+            if (ok) {
+                return this.onok();
+            } else {
+                return this.oncancel();
+            }
+        }
+    });
+    dialog.render();
+</script>
+</body>
+</html>

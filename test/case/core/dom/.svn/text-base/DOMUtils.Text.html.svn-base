@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+ <head>
+	<title>domUtils.Text</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!--qunit js -->
+	<script type="text/javascript" src="../../../qunit/qunit.js"></script>
+	<link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet" />
+	<!--qunit js -->
+ </head>
+
+ <body>
+	<h1 id="qunit-header">domUtils.Text Test</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+    <div id="test">
+    </div>
+
+    <script type="text/javascript" src="../../../../src/editor.js"></script>
+     <script type="text/javascript" src="../../../../src/core/utils.js"></script>
+      <script type="text/javascript" src="../../../../src/core/browser.js"></script>
+     <script type="text/javascript" src="../../../../src/core/dom/dom.js"></script>
+    <script type="text/javascript" src="../../../../src/core/dom/domUtils.js"></script>
+
+ </body>
+</html>
+<script>
+    module("domUtils.Text");
+
+    var dom = baidu.editor.dom.domUtils,
+        div = document.getElementById('test');
+
+    test("isWhitespace", function(){
+        var first = div.appendChild(document.createTextNode('\n'));
+        ok(dom.isWhitespace(first)) ;
+    });
+
+    test("split", function(){
+        div.innerHTML = '1234';
+        var first = div.firstChild;
+        equals(dom.split(first,4).length,0);
+        equals(div.childNodes.length,2);
+
+        equals(dom.split(div.firstChild,2).nodeValue,'34') ;
+        equals(div.childNodes.length,3)
+    });
+</script>

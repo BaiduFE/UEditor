@@ -1,0 +1,589 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <style type="text/css">
+        code { font-family: monospace; }
+        table.commands {
+            border-collapse: collapse;
+        }
+        table.commands td, table.commands th {
+            border: 1px solid lightgreen;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="doc">
+    <div id="body">
+        <h1>Commands Introduce</h1>
+        <hr/>
+        <h2>Commands</h2>
+        <table class="commands" >
+            <tr>
+                <th>功能</th>
+                <th>说明</th>
+                <th>命令</th>
+                <th>参数</th>
+                <th>返回值</th>
+                <th>需要引入文件(*.js)</th>
+            </tr>
+            <tr>
+                <td rowspan="2">bold</td>
+                <td>切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="bold"</td>
+                <td>true/false</td>
+                <td rowspan="12"><code>basestyle</code></td>
+            </tr>
+            <tr>
+                <td>查询字体效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="bold"</td>
+                <td>0：不为加粗状态。1：为加粗状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">italic</td>
+                <td>切换选区文本的斜体样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="italic"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询斜体效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="italic"</td>
+                <td>0：不为斜体状态。1：为斜体状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">underline</td>
+                <td>切换选区文本的下划线样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="underline"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询下划线效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="underline"</td>
+                <td>0：不为下划线状态。1：为下划线状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">strikethrough</td>
+                <td>切换选区文本的删除线样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="strikethrough"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询删除线效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="strikethrough"</td>
+                <td>0：不为删除线状态。1：为删除线状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">subscript</td>
+                <td>切换选区文本的下脚标样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="subscript"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询下脚标效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="subscript"</td>
+                <td>0：不为下脚标状态。1：为下脚标状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">superscript</td>
+                <td>切换选区文本的上脚标样式，若选区闭合（即插入符状态）效果参考word</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="superscript"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询上脚标效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="superscript"</td>
+                <td>0：不为上脚标状态。1：为上脚标状态</td>
+            </tr>
+            <tr>
+                <td rowspan="2">blockquote</td>
+                <td>给选区内容加引号</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="blockquote"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>blockquote</code></td>
+            </tr>
+            <tr>
+                <td>查询内容引号效果</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="blockquote"</td>
+                <td>0：不为引号状态。1：为引号状态</td>
+            </tr>
+            <tr>
+                <td>cleardoc</td>
+                <td>清空文档</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="cleardoc"</td>
+                <td>true/false</td>
+                <td><code>cleardoc</code></td>
+            </tr>
+            <tr>
+                <td rowspan="2">directionality</td>
+                <td>定义输入方向.forward:ltr从左到右,rtl从右到左</td>
+                <td>execCommand(cmdName,forward)</td>
+                <td>cmdName="directionality",forward="ltr"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>directionality</code></td>
+            </tr>
+            <tr>
+                <td>查询输入方向</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="directionality"</td>
+                <td>ltr：从左到右输入，rtl：从右到左输入</td>
+            </tr>
+            <tr>
+                <td rowspan="2">elementpath</td>
+                <td>查找选区路径，level取值范围为小于等于0,0代表从当前节点查找,-1为上一级</td>
+                <td>execCommand(cmdName,level)</td>
+                <td>cmdName="elementpath"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>elementpath</code></td>
+            </tr>
+            <tr>
+                <td>返回所有父节点的标签名称</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="elementpath"</td>
+                <td>返回：父标签名称的数组。</td>
+            </tr>
+            <tr>
+                <td rowspan="2">forecolor</td>
+                <td>设置选区文本的字体颜色（参数值参考css中的color，若参数使用'default'值，则表示去除字体颜色）</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="forecolor"</td>
+                <td>true/false</td>
+                <td rowspan="8"><code>font</code></td>
+            </tr>
+            <tr>
+                <td>查询字体颜色</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="forecolor"</td>
+                <td>返回字体颜色样式</td>
+            </tr>
+            <tr>
+                <td rowspan="2">backcolor</td>
+                <td>设置选区文本的字体背景颜色（参数值参考css中的color，若参数使用'default'值，则表示去除字体背景颜色）</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="backcolor"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询字体背景颜色</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="backcolor"</td>
+                <td>返回字体背景样式</td>
+            </tr>
+            <tr>
+                <td rowspan="2">fontsize</td>
+                <td>设置选区文本的字号大小（参数值参考css中的font-size）</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="fontsize"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询字体大小</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="fontsize"</td>
+                <td>返回字体大小样式</td>
+            </tr>
+            <tr>
+                <td rowspan="2">fontfamily</td>
+                <td>设置选区文本的字体样式（参数值参考css中的font-size）</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="fontfamily"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询字体样式</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="fontfamily"</td>
+                <td>返回字体样式</td>
+            </tr>
+            <tr>
+                <td rowspan="2">horizontal</td>
+                <td>输入分割线</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="horizontal"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>horizontal</code></td>
+            </tr>
+            <tr>
+                <td>查询分割线</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="horizontal"</td>
+                <td>0：不为分割线。1：为分割线</td>
+            </tr>
+            <tr>
+                <td>inserthtml</td>
+                <td>在插入符位置插入HTML片段（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）</td>
+                <td>execCommand(cmdName,html)</td>
+                <td>cmdName="inserthtml",html="<span>html代码</span>"</td>
+                <td>true/false</td>
+                <td><code>inserthtml</code></td>
+            </tr>
+            <tr>
+                <td rowspan="2">justify</td>
+                <td>将选区或插入符所在段落设置对齐方式.left:居左对齐。right:居右对齐。center:居中对齐。justify:两端对齐</td>
+                <td>execCommand(cmdName,align)</td>
+                <td>cmdName="justify",align="left"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>justify</code></td>
+            </tr>
+            <tr>
+                <td>查询格式对齐方式</td>
+                <td>queryCommandValue(cmdName)</td>
+                <td>cmdName="justify"</td>
+                <td>返回：left居左，right：居右，center：居中，justify两端对齐</td>
+            </tr>
+            <tr>
+                <td rowspan="2">link</td>
+                <td>将选区作为超链接的文本，参数作为超链接的href值，在选区位置创建一个超链接</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="link"</td>
+                <td>true/false</td>
+                <td rowspan="4"><code>link</code></td>
+            </tr>
+            <tr>
+                <td>查询是否为链接</td>
+                <td>queryCommandValue(cmdName)</td>
+                <td>cmdName="link"</td>
+                <td>返回选区中第一个link节点</td>
+            </tr>
+            <tr>
+                <td rowspan="2">unlink</td>
+                <td>将选区所在的超链接转换为文本</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="unlink"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询格式对齐方式</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="unlink"</td>
+                <td>0：不是链接。1：是链接</td>
+            </tr>
+            <tr>
+                <td rowspan="3">insertunorderedlist</td>
+                <td>在插入符位置插入无序列表（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）可以指定列表样式（参数值参考list-style-type，默认值是'disc'）</td>
+                <td>execCommand(cmdName,style)</td>
+                <td>cmdName="insertunorderedlist",style="disc"</td>
+                <td>true/false</td>
+                <td rowspan="6"><code>list</code></td>
+            </tr>
+            <tr>
+                <td>查询是否为无序列表</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="insertunorderedlist"</td>
+                <td>0：不是无序列表。1：是无序列表</td>
+            </tr>
+            <tr>
+                <td>查询为无序列表的值</td>
+                <td>queryCommandValue(cmdName)</td>
+                <td>cmdName="insertunorderedlist"</td>
+                <td>无序列表的节点</td>
+            </tr>
+            <tr>
+                <td rowspan="3">insertorderedlist</td>
+                <td>在插入符位置插入有序列表（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）可以指定列表样式（参数值参考list-style-type，默认值是'decimal'）</td>
+                <td>execCommand(cmdName,style)</td>
+                <td>cmdName="insertorderedlist",style="disc"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否为有序列表</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="insertorderedlist"</td>
+                <td>0：不是有序列表。1：是有序列表</td>
+            </tr>
+            <tr>
+                <td>查询为有序列表的值</td>
+                <td>queryCommandValue(cmdName)</td>
+                <td>cmdName="insertorderedlist"</td>
+                <td>有序列表的节点</td>
+            </tr>
+            <tr>
+                <td rowspan="2">paragraph</td>
+                <td>插入段落style可以为p,h1,h2,h3,h4,h5,h6</td>
+                <td>execCommand(cmdName,style)</td>
+                <td>cmdName="paragraph",style="p"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>paragraph</code></td>
+            </tr>
+            <tr>
+                <td>查询段落标签</td>
+                <td>queryCommandValue(cmdName)</td>
+                <td>cmdName="paragraph"</td>
+                <td>返回标签：比如"p"</td>
+            </tr>
+            <tr>
+                <td>preview</td>
+                <td>预览</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="preview"</td>
+                <td>true/false</td>
+                <td><code>preview</code></td>
+            </tr>
+            <tr>
+                <td>print</td>
+                <td>打印</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="print"</td>
+                <td>true/false</td>
+                <td><code>print</code></td>
+            </tr>
+            <tr>
+                <td>removeformat</td>
+                <td>清除选区文本的格式</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="removeformat"</td>
+                <td>true/false</td>
+                <td><code>removeformat</code></td>
+            </tr>
+            <tr>
+                <td>searchreplace</td>
+                <td>查找替换,opt为对象{replaceStr:替换字符串,all:是否全部替换,casesensitive:是否匹配大小写true为匹配大小写,dir:1为向下查找,-1为向上查找}</td>
+                <td>execCommand(cmdName,opt)</td>
+                <td>cmdName="searchreplace",opt={replaceStr : null,all : false,casesensitive : false,dir : 1}</td>
+                <td>true/false</td>
+                <td><code>searchreplace</code></td>
+            </tr>
+            <tr>
+                <td>selectall</td>
+                <td>全选编辑区内容</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="selectall"</td>
+                <td>true/false</td>
+                <td><code>selectall</code></td>
+            </tr>
+            <tr>
+                <td rowspan="2">source</td>
+                <td>查看源码</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="source"</td>
+                <td>true/false</td>
+                <td rowspan="2"><code>source</code></td>
+            </tr>
+            <tr>
+                <td>查询当前是否为查看源码状态</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="source"</td>
+                <td>0：不为查看源码状态，1：为查看源码状态</td>
+            </tr>
+            <tr>
+                <td>time</td>
+                <td>插入时间</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="time"</td>
+                <td>true/false</td>
+                <td><code>time</code></td>
+            </tr>
+            <tr>
+                <td>date</td>
+                <td>插入日期</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="date"</td>
+                <td>true/false</td>
+                <td><code>time</code></td>
+            </tr>
+            <tr>
+                <td rowspan="2">inserttable</td>
+                <td>插入表格,tableobj{cellpadding:0,cellspacing:0,width:100,height:100,cellborder:1,border:1,numRows:2,numCols:2}</td>
+                <td>execCommand(cmdName,tableobj)</td>
+                <td>cmdName="inserttable",tableobj={}</td>
+                <td>true/false</td>
+                <td rowspan="24"><code>table</code></td>
+            </tr>
+            <tr>
+                <td>查询当前选区是否为表格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="inserttable"</td>
+                <td>0：不在表格里，1：在表格里</td>
+            </tr>
+            <tr>
+                <td rowspan="2">deletetable</td>
+                <td>删除表格</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="deletetable"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询当前选区是否为表格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="deletetable"</td>
+                <td>0：不在表格里，1：在表格里</td>
+            </tr>
+            <tr>
+                <td rowspan="2">mergeright</td>
+                <td>向右合并单元格</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="mergeright"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询右方是否为可合并单元格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="mergeright"</td>
+                <td>0：不可合并，1：可合并</td>
+            </tr>
+            <tr>
+                <td rowspan="2">mergedown</td>
+                <td>向下合并单元格</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="mergedown"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询下方是否为可合并单元格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="mergedown"</td>
+                <td>0：不可合并，1：可合并</td>
+            </tr>
+            <tr>
+                <td rowspan="2">deleterow</td>
+                <td>删除行</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="deleterow"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询下方是否为可删除行</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="deleterow"</td>
+                <td>0：不可删除，1：可删除</td>
+            </tr>
+            <tr>
+                <td rowspan="2">deletecol</td>
+                <td>删除列</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="deletecol"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询下方是否为可删除列</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="deletecol"</td>
+                <td>0：不可删除，1：可删除</td>
+            </tr>
+            <tr>
+                <td rowspan="2">splittocells</td>
+                <td>完全拆分单元格</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="splittocells"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否可以完全拆分单元格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="splittocells"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td rowspan="2">splittorows</td>
+                <td>将单元格拆分成行</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="splittorows"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否可以将单元格拆分成行</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="splittorows"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td rowspan="2">splittocols</td>
+                <td>将单元格拆分成列</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="splittocols"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否可以将单元格拆分成列</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="splittocols"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td rowspan="2">insertrow</td>
+                <td>插入行</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="insertrow"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否可以插入行</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="insertrow"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td rowspan="2">insertcol</td>
+                <td>插入列</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="insertcol"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询是否可以插入列</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="insertcol"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td rowspan="2">mergecells</td>
+                <td>合并多个单元格，通过两个cell将当前包含的所有横纵单元格进行合并</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="mergecells"</td>
+                <td>true/false</td>
+            </tr>
+            <tr>
+                <td>查询选区内容是否为可以合并的单元格</td>
+                <td>queryCommandState(cmdName)</td>
+                <td>cmdName="mergecells"</td>
+                <td>0：不可以，1：可以</td>
+            </tr>
+            <tr>
+                <td>insertvideo</td>
+                <td>插入视频</td>
+                <td>execCommand(cmdName)</td>
+                <td>cmdName="insertvideo"</td>
+                <td>true/false</td>
+                <td>video</td>
+            </tr>
+            
+
+        </table>
+        <h2>Plugins</h2>
+        <table class="commands">
+            <tr><th>功能说明</th><th>构造编辑器时配置参数</th><th>需要引入文件(*.js)</th></tr>
+            <tr><td>当输入内容超过编辑器高度时,编辑器会自动增高</td><td>无</td><td>autoheight</td></tr>
+            <tr><td>设置回车标签,默认为br</td><td>enterTag: "p"</td><td>enterkey</td></tr>
+            <tr><td>修复chrome下图片不能点击的问题</td><td>无</td><td>fiximgclick</td></tr>
+            <tr><td>处理特殊键的兼容性问题</td><td>无</td><td>keystrokes</td></tr>
+            <tr><td>可以进行粘贴操作</td><td>无</td><td>paste</td></tr>
+            <tr><td>过滤html标签,rule为对象分为白名单和黑名单,详情请看示例demo</td><td>serialize：rule</td><td>serialize</td></tr>
+            <tr><td>快捷键</td><td>无</td><td>shortcutkeys</td></tr>
+            <tr><td>对表格操作</td><td>无</td><td>table</td></tr>
+            <tr><td>使编辑器具有前进后退的功能</td><td>无</td><td>undo</td></tr>
+        </table>
+        <h2>Remarks</h2>
+        <p>若上表中指出命令需要传参数，则请在调用execCommand时第二个参数给出（和浏览器原生的不太一样），
+            <br/>若上表指出命令参数有默认值，则可以不用传第二个参数。
+            <br/>对于上表中未列出的command会自动调用<a href="https://developer.mozilla.org/en/rich-text_editing_in_mozilla">浏览器原生的execComand</a>处理</p>
+    </div>
+</div>
+</body>
+</html>

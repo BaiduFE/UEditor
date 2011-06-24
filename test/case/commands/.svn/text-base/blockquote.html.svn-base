@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+    <title>blockquote</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+
+    <script src="../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../src/core/EventBase.js" type="text/javascript"></script>
+
+    <script src="../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Selection.js" type="text/javascript"></script>
+    <script src="../../../src/core/Editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+    <script src="../../../src/commands/blockquote.js" type="text/javascript"></script>
+</head>
+
+<body>
+<h1 id="qunit-header">blockquote</h1>
+
+<h2 id="qunit-banner"></h2>
+
+
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test" style="width:500px;height:500px;border:1px solid #ccc"></div>
+
+
+</body>
+</html>
+<script>
+    var editor = new baidu.editor.Editor();
+    editor.render( 'test' );
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd,
+            range = new baidu.editor.dom.Range( document );
+    module( "blockquote" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+
+    function manualDeleteFillData() {
+        var fillData = baidu.editor.Editor.fillData;
+        fillData  && domUtils.remove( fillData );
+        baidu.editor.Editor.fillData = null;
+    }
+    test( 'blockquote', function() {
+        editor.focus();
+        editor.setContent( '<b><i>xxxx</i></b>' );
+        var d = editor.document;
+        var range = new baidu.editor.dom.Range( editor.document );
+        range.setStart( editor.document.getElementsByTagName( 'i' )[0].firstChild, 2 ).collapse( true ).select();
+
+        editor.execCommand( 'blockquote' );
+        manualDeleteFillData();
+        equals( getHTML( editor.document.body ), '<blockquote><b><i>xxxx</i></b></blockquote>' );
+
+        editor.setContent( '<table><tbody><tr><td>xxxx</td></tr></tbody></table>' );
+        range.setStart( editor.document.getElementsByTagName( 'td' )[0].firstChild, 2 ).collapse( true ).select();
+
+        editor.execCommand( 'blockquote' );
+        manualDeleteFillData();
+        equals( getHTML( editor.document.body ), '<blockquote><table><tbody><tr><td>xxxx</td></tr></tbody></table></blockquote>' );
+
+        editor.setContent( '<table><tbody><tr><td>xxxx</td></tr></tbody></table>' );
+        range.setStart( editor.document.getElementsByTagName( 'td' )[0].firstChild, 2 ).setEnd(editor.document.getElementsByTagName('table')[0],1).select();
+        editor.execCommand( 'blockquote' );
+       manualDeleteFillData();
+       equals( getHTML( editor.document.body ), '<blockquote><table><tbody><tr><td>xxxx</td></tr></tbody></table></blockquote>' );
+
+
+        editor.setContent( 'xxxx' );
+        range.setStart( editor.document.body.firstChild, 2 ).setEnd(editor.document.body.firstChild,4).select();
+        editor.execCommand( 'blockquote' );
+       manualDeleteFillData();
+       equals( getHTML( editor.document.body ), '<blockquote>xxxx</blockquote>' );
+
+        editor.setContent( 'xxxx' );
+        range.selectNodeContents(editor.document.body).select();
+        editor.execCommand( 'blockquote' );
+       manualDeleteFillData();
+       equals( getHTML( editor.document.body ), '<blockquote>xxxx</blockquote>' );
+
+        editor.execCommand('blockquote');
+         equals( getHTML( editor.document.body ), 'xxxx' );
+
+          editor.setContent( '<blockquote><table><tbody><tr><td>xxxx</td></tr></tbody></table></blockquote>xxxx<blockquote>xxxx</blockquote><blockquote>xxxxx</blockquote>xxxx' );
+
+        range.setStart(editor.document.getElementsByTagName('blockquote')[0],0).setEnd(editor.document.getElementsByTagName('blockquote')[0].nextSibling,4).select();
+
+        editor.execCommand( 'blockquote' );
+       manualDeleteFillData();
+       equals( getHTML( editor.document.body ), '<table><tbody><tr><td>xxxx</td></tr></tbody></table>xxxx<blockquote>xxxx</blockquote><blockquote>xxxxx</blockquote>xxxx' );
+
+    } )
+</script>

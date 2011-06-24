@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//dtd HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div style="height:2000px;"></div>
+<span id="t">123</span>
+<script type="text/javascript">
+    document.onclick = function (){
+        document.getElementById('t').scrollIntoView(true);
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+    <title>Range.removeInlineStyle</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+
+    <script src="../../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+<h1 id="qunit-header">Range.removeInlineStyle Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test">
+</div>
+
+
+</body>
+</html>
+<script>
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd;
+    range = new baidu.editor.dom.Range( document );
+    module( "Range" );
+
+
+    function genDom( html ) {
+        var div = document.createElement( 'div' );
+        div.innerHTML = html;
+        return div.firstChild;
+    }
+
+    function getHTML( co ) {
+        var div = document.createElement( 'div' ), h;
+
+        if ( !co )
+            return 'null';
+
+        div.appendChild( co.cloneNode( true ) );
+        h = div.innerHTML.toLowerCase();
+        g
+        h = h.replace( /[\r\n\t]/, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    ;
+    function get( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+    var div = document.getElementById( 'test' ),
+
+            range = new baidu.editor.dom.Range( document );
+
+
+    test( 'removeInlineStyle', function() {
+        div.innerHTML = '<b>xxxx</b>';
+        range.setStart( div, 0 ).setEnd( div, 1 );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), 'xxxx' );
+
+        div.innerHTML = "<b><i>xxxx</i></b>";
+        range.setStart( div.getElementsByTagName( 'i' )[0], 0 ).setEnd( div.getElementsByTagName( 'i' )[0], 1 );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<i>xxxx</i>' )
+        same( trans( range ), {
+            startContainer:div,
+            startOffset:0,
+            endContainer:div,
+            endOffset:1
+        } );
+
+        div.innerHTML = "<b><i>xxxx</i></b>";
+        range.setStart( div.getElementsByTagName( 'b' )[0], 0 ).setEnd( div.getElementsByTagName( 'i' )[0].firstChild, 3 );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<i>xxx</i><b><i>x</i></b>' );
+        same( trans( range ), {
+            startContainer:div,
+            startOffset:0,
+            endContainer:div,
+            endOffset:1
+        } );
+
+        div.innerHTML = "<table><tr><td>&nbsp;</td><td><table><tr><td><b>xxxxxx</b></td></tr></table></td><td><b>xxxxxx</b></td></tr></table>";
+        range.setStart( div, 0 ).setEnd( div, 1 );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<table><tbody><tr><td>&nbsp;</td><td><table><tbody><tr><td>xxxxxx</td></tr></tbody></table></td><td>xxxxxx</td></tr></tbody></table>' );
+
+        div.innerHTML = "xxx<b><i><u>cccc</u></i></b>"
+        range.setStart( div.firstChild, 2 ).setEnd( div.getElementsByTagName( 'u' )[0].firstChild, 2 );
+        range.removeInlineStyle( 'u' );
+        equals( get( div ), 'xxx<b><i>cc<u>cc</u></i></b>' );
+
+        div.innerHTML = "xxx<b><i><u>cccc</u></i></b>"
+        range.setStart( div.firstChild, 2 ).setEnd( div.getElementsByTagName( 'u' )[0].firstChild, 2 );
+        range.removeInlineStyle( 'i' );
+        equals( get( div ), 'xxx<b><u>cc</u><i><u>cc</u></i></b>' );
+
+        div.innerHTML = "<b><i><u>xxxx</u></i></b>bbbbb<b><i><u>xxxx</u></i></b>"
+        range.setStart( div.getElementsByTagName( 'u' )[0].firstChild, 2 ).setEnd( div.getElementsByTagName( 'u' )[1].firstChild, 2 );
+        range.removeInlineStyle( 'u' );
+        equals( get( div ), '<b><i><u>xx</u>xx</i></b>bbbbb<b><i>xx<u>xx</u></i></b>' );
+
+        div.innerHTML = "<b><i><u>xxxx</u></i></b>bbbbb<b><i><u>xxxx</u></i></b>"
+        range.setStart( div.getElementsByTagName( 'u' )[0].firstChild, 2 ).setEnd( div.getElementsByTagName( 'u' )[1].firstChild, 2 );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<b><i><u>xx</u></i></b><i><u>xx</u></i>bbbbb<i><u>xx</u></i><b><i><u>xx</u></i></b>' );
+
+        same( trans( range ), {
+            startContainer:div,
+            startOffset:1,
+            endContainer:div,
+            endOffset:4
+        } );
+        div.innerHTML = '<p><b>xxxx</b></p><b>cccccc</b>';
+        range.setStartBefore( div.getElementsByTagName( 'b' )[0] );
+        range.setEndAfter( div.getElementsByTagName( 'b' )[1].firstChild );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<p>xxxx</p>cccccc' );
+
+         same( trans( range ), {
+            startContainer:div.firstChild,
+            startOffset:0,
+            endContainer:div,
+            endOffset:2
+        } );
+         div.innerHTML = '<b><i>xxxxx</i></b><i>bb</i><b>bbb</b>b<b><i>ccccc</i></b>';
+        range.setStart( div.getElementsByTagName( 'b' )[0],0 );
+        range.setEndAfter( div.getElementsByTagName( 'b' )[2].firstChild );
+        range.removeInlineStyle( 'b' );
+        equals( get( div ), '<i>xxxxx</i><i>bb</i>bbbb<i>ccccc</i>' );
+
+         same( trans( range ), {
+            startContainer:div,
+            startOffset:0,
+            endContainer:div,
+            endOffset:5
+        } );
+
+        div.innerHTML = "<b><i>xxxx</i></b>";
+        range.setStart(div.firstChild.firstChild.firstChild,2).collapse(true);
+
+        range.removeInlineStyle('b');
+
+    } );
+
+</script>

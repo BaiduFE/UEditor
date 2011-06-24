@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+    <title>Range</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+</head>
+
+<body>
+<h1 id="qunit-header">Range Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test">
+</div>
+
+<script src="../../../../src/editor.js" type="text/javascript"></script>
+<script src="../../../../src/core/utils.js" type="text/javascript"></script>
+<script src="../../../../src/core/browser.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+</body>
+</html>
+<script>
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd;
+    range = new baidu.editor.dom.Range( document );
+    module( "Range" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+    var div = document.getElementById( 'test' );
+
+    test( 'selectNodeContents', function() {
+        div.innerHTML = '<b>xxxx</b>xxxx';
+        debugger
+        var dd = range.selectNodeContents( div );
+        same( {startContainer : div,startOffset:0,endContainer:div,endOffset : div.childNodes.length}, trans( range ) );
+
+        range.selectNodeContents( div.lastChild );
+        same( {startContainer : div.lastChild,startOffset:0,endContainer:div.lastChild,endOffset : 4}, trans( range ) );
+
+    } )
+    test( 'selectNode', function() {
+        div.innerHTML = '<b>xxxx</b>xxxx';
+        range.selectNode( div.firstChild );
+        same( {startContainer : div,startOffset:0,endContainer:div,endOffset : 1}, trans( range ) );
+
+
+    } )
+    test( 'setStart', function() {
+        div.innerHTML = '<img/>';
+        var range = new baidu.editor.dom.Range( document );
+        range.setStart( div.firstChild, 0 );
+        same( {startContainer : div,startOffset:0,endContainer:div,endOffset : 0}, trans( range ) );
+
+        range = new baidu.editor.dom.Range( document );
+        range.setEnd( div.firstChild, 0 );
+
+        same( {startContainer : div,startOffset:1,endContainer:div,endOffset : 1}, trans( range ) );
+    } )
+    test( 'shrinkBoundary', function() {
+        div.innerHTML = '<b><i>xxxx</i>xxxxxxx</b>';
+        var range = new baidu.editor.dom.Range( document );
+        range.selectNodeContents( div ).shrinkBoundary( true );
+
+        same( {startContainer : div.firstChild.firstChild,startOffset:0,endContainer:div,endOffset : 1}, trans( range ) );
+
+        range.selectNodeContents( div ).shrinkBoundary();
+
+        same( {startContainer : div.firstChild.firstChild,startOffset:0,endContainer:div.firstChild,endOffset : div.firstChild.childNodes.length}, trans( range ) );
+
+        div.innerHTML = 'xxxx<b><i><u></u></i></b>ssss'
+        range.selectNode( div.getElementsByTagName( 'b' )[0] ).shrinkBoundary();
+        same( {startContainer : div.getElementsByTagName( 'u' )[0],startOffset:0,endContainer:div.getElementsByTagName( 'u' )[0],endOffset :0}, trans( range ) );
+
+        div.innerHTML = '<table><tr><td>sssss</td></tr></table>';
+        range.setStart( div.firstChild, 0 ).setEnd( div.firstChild.getElementsByTagName( 'tr' )[0], 1 ).shrinkBoundary();
+        same( {startContainer : div.getElementsByTagName( 'td' )[0],startOffset:0,endContainer:div.getElementsByTagName( 'td' )[0],endOffset :1}, trans( range ) );
+
+        div.innerHTML = '<img/>';
+        range.setStart( div, 0 ).setEnd( div, 1 ).shrinkBoundary();
+        equals(getHTML(div),'<img>')
+    } );
+    test( 'trimBoundary', function() {
+        div.innerHTML = '<b><i>xxxx</i>xxxxxxx</b>';
+
+        range.setStart( div.firstChild.firstChild.firstChild, 2 ).setEnd( div.firstChild.lastChild, 3 ).trimBoundary();
+        same( {startContainer : div.getElementsByTagName( 'i' )[0],startOffset:1,endContainer:div.firstChild,endOffset :2}, trans( range ) );
+
+        range.selectNode( div.firstChild.lastChild ).trimBoundary();
+        same( {startContainer : div.getElementsByTagName( 'b' )[0],startOffset:2,endContainer:div.getElementsByTagName( 'b' )[0],endOffset :3}, trans( range ) );
+
+        div.innerHTML = '123456';
+        range.setStart( div.firstChild, 2 ).setEnd( div.firstChild, 4 ).trimBoundary( true );
+        same( {startContainer : div,startOffset:1,endContainer:div.lastChild,endOffset :2}, trans( range ) );
+
+        div.innerHTML = '123456';
+
+        range.setStart( div.firstChild, 2 ).setEndAfter( div.firstChild ).trimBoundary( true );
+        same( {startContainer : div,startOffset:1,endContainer:div,endOffset :2}, trans( range ) );
+
+        div.innerHTML = '123456';
+        range.setStart( div.firstChild, 2 ).setEnd( div.firstChild,4).trimBoundary();
+        same( {startContainer : div,startOffset:1,endContainer:div,endOffset :2}, trans( range ) );
+
+
+
+
+    } );
+
+    test( 'insertNode', function() {
+        div.innerHTML = '<b><i>xxxx</i>xxxxxxx</b>';
+
+        range.setStart( div.firstChild.firstChild.firstChild, 2 ).setEnd( div.firstChild.lastChild, 3 );
+        range.insertNode( document.createElement( 'i' ) );
+
+        equals( getHTML( div ), '<b><i>xx<i></i>xx</i>xxxxxxx</b>' );
+        same( {startContainer : div.getElementsByTagName( 'i' )[0],startOffset:1,endContainer:div.firstChild.lastChild,endOffset :3}, trans( range ) );
+
+        var frg = document.createDocumentFragment();
+        frg.appendChild( document.createElement( 'b' ) );
+        frg.appendChild( document.createTextNode( 'bbb' ) );
+        div.innerHTML = 'xxxxx';
+        range.setStart( div.firstChild, 2 ).setEnd( div, div.childNodes.length );
+
+        range.insertNode( frg );
+        equals( getHTML( div ), 'xx<b></b>bbbxxx' );
+        same( {startContainer : div,startOffset:1,endContainer:div,endOffset :div.childNodes.length}, trans( range ) );
+
+        range.collapse().insertNode( document.createElement( 'u' ) );
+        same( {startContainer : div,startOffset:div.childNodes.length - 1,endContainer:div,endOffset :div.childNodes.length}, trans( range ) );
+
+    } )
+
+    test( 'createBookmark/moveToBookmark', function() {
+        div.innerHTML = '<b><i>xxxx</i>xxxxxxx</b>';
+
+        var bookmark = range.selectNode( div ).createBookmark();
+        same( {startContainer : div.parentNode,startOffset:domUtils.getNodeIndex( div ),
+            endContainer:div.parentNode,endOffset :domUtils.getNodeIndex( div ) + 1}, trans( range ) );
+
+        range.moveToBookmark( bookmark );
+        same( {startContainer : div.parentNode,startOffset:domUtils.getNodeIndex( div ),
+            endContainer:div.parentNode,endOffset :domUtils.getNodeIndex( div ) + 1}, trans( range ) );
+
+
+        bookmark = range.setStart( div.firstChild.firstChild.firstChild, 2 ).setEnd( div.firstChild.lastChild, 3 ).createBookmark();
+        same( {startContainer : div.getElementsByTagName( 'i' )[0],startOffset:2,
+            endContainer:div.getElementsByTagName( 'b' )[0],endOffset :2}, trans( range ) );
+        range.moveToBookmark( bookmark );
+        same( {startContainer : div.getElementsByTagName( 'i' )[0],startOffset:1,
+            endContainer:div.getElementsByTagName( 'b' )[0],endOffset :2}, trans( range ) );
+
+    } );
+    test( 'enlarge', function() {
+        div.innerHTML = 'xx<b><i>xxxx</i>xxxxxxx</b>';
+
+        range.selectNodeContents( div.getElementsByTagName( 'i' )[0] );
+        range.enlarge();
+        same( {startContainer : div,startOffset:1,
+            endContainer:div.lastChild,endOffset:1}, trans( range ) );
+        div.innerHTML = '<div></div>xxxx<div></div>';
+        range.setStart( div.firstChild.nextSibling, 2 ).collapse( true )
+        range.enlarge( true );
+        same( {startContainer : div,startOffset:1,
+            endContainer:div,endOffset:2}, trans( range ) );
+
+        div.innerHTML = 'xxxxx<b>bbb[bb</b><p>xxxxx]</p>';
+        range.setStart( div.firstChild.nextSibling.firstChild, 2 ).setEnd( div.lastChild, 1 )
+        debugger
+        range.enlarge( true );
+
+        same( {startContainer : document.body,startOffset:12,
+            endContainer:document.body,endOffset:13}, trans( range ) );
+
+
+    } );
+
+    test('txtToElmBoundary',function(){
+        div.innerHTML = 'xxxx<b>xxxx</b>';
+        range.setStart(div.firstChild,0).setEnd(div.lastChild.firstChild,4).txtToElmBoundary();
+          same( {startContainer : div,startOffset:0,
+            endContainer:div.lastChild,endOffset:1}, trans( range ) );
+    })
+
+
+</script>

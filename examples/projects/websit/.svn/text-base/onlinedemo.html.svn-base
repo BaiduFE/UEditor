@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>02-online demo</title>
+<link rel="stylesheet" href="css/public.css" type="text/css">
+<link rel="stylesheet" href="css/onlinedemo.css" type="text/css">
+</head>
+<body>
+
+<div class="container">
+	
+	<div class="bananer"></div>
+	<div class="con">
+		<div class="con-left">
+			<div class="con-left-nav">
+				<a href="#" class="item">Introductory</a>
+				<a href="#" class="item">Simple example</a>
+				<a href="#" class="item">Use a custom UI</a>
+				<a href="#" class="item">Use the plugin</a>
+				<a href="#" class="item">Writing a plugin</a>
+			</div>
+		
+		</div>
+		<div class="con-right">	
+			<div class="con-right-con">
+				<h3 class="f18">UEditor - Javascript WYSIWYG Editor</h3>
+				<p class="l22 C75">UEditor is a platform independent web based Javascript HTML WYSIWYG editor control released as Open Source under LGPL by Moxiecode Systems AB.has the ability to convert HTML .UEditor is very easy to integrate into other Content Management Systems. </p>
+				<p class="l22 C75"><a href="#"><img src="img/index-download.gif"></a> </p>
+			</div>
+			<div class="con-right-con">
+				<h3 class="f18">View Example</h3>
+				<p class="l22 C5C">This example displays all plugins and buttons that comes with t</p>
+				<div id="example"></div>
+			</div>
+			<div class="con-right-con">
+				<h3 class="f18">View Source</h3>
+				<p class="l22 C5C">Below is all you need to setup the example.</p>
+				<div id="source"></div>
+			</div>
+
+		</div>
+		<div class="clear"></div>
+		<div class="con-split"></div>
+</div>
+
+</body>
+</html>
+
+

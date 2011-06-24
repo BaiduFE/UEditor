@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        var paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+            //给字体加粗的命令
+            'commands/basestyle.js',
+            //ui的基础库
+            'ui/ui.js',
+            'ui/uiutils.js',
+            'ui/uibase.js',
+            'ui/stateful.js',
+            //ui的类型
+            'ui/button.js'
+        ];
+        (function(){
+            var i = -1,baseURL = '../../src/',//基础路径
+                absolute;
+            while(i++ < paths.length-1){
+                absolute = baseURL + paths[i];
+                document.write("<script type='text/javascript' charset='utf-8' src='"+absolute+"'><\/script>");
+            }
+        })()
+    </script>
+    <style type="text/css">
+        #editor {
+            border: 1px solid #CCC;
+            width:400px;
+            float:left;
+        }
+        #editor_toolbar_box {
+            background: #F0F0EE;
+            padding: 2px;
+        }
+        #editor_iframe_holder {
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+        }
+        .edui-box div{
+            width:40px;
+            height:25px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor">
+        <div id="editor_toolbar_box">
+            <div id="editor_toolbar">
+            </div>
+        </div>
+        <div id="editor_iframe_holder"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        var myeditor = new baidu.editor.Editor({
+            initialContent: 'hello world'//初始化编辑器的内容
+        });
+        //渲染编辑器
+        myeditor.render('editor_iframe_holder');
+        //创建编辑器ui
+        var editorui = baidu.editor.ui,
+            btnCmd = "Bold";
+        var ui =  new editorui.Button({
+            className: 'edui-for-' + btnCmd.toLowerCase(),
+            label : '加粗',          //显示的内容
+            title: "加粗",           //悬停时显示
+            onclick: function (){
+                myeditor.execCommand(btnCmd.toLowerCase());
+            },
+            id : "editor_toolbar"
+        });
+        ui.render();
+    </script>
+</body>
+</html>

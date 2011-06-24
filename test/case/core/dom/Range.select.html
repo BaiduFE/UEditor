@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+<head>
+    <title>Range</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+</head>
+
+<body>
+<h1 id="qunit-header">Range Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test" style="width:500px;height:500px;border:1px solid #ccc"></div>
+    <script src="../../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../../src/core/EventBase.js" type="text/javascript"></script>
+
+    <script src="../../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+     <script src="../../../../src/core/dom/Selection.js" type="text/javascript"></script>
+     <script src="../../../../src/core/Editor.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+</body>
+</html>
+<script>
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd;
+
+    module( "Range" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+     function manualDeleteFillData() {
+        var fillData = baidu.editor.Editor.fillData;
+        fillData  && domUtils.remove( fillData );
+        baidu.editor.Editor.fillData = null;
+    }
+    var div = document.getElementById( 'test' );
+    var editor = new baidu.editor.Editor();
+    editor.render('test');
+     range = new baidu.editor.dom.Range(editor.document);
+     test('select',function(){
+        if(baidu.editor.browser.ie){
+            editor.setContent('<b><br/></b>');
+            range.setStart(editor.document.getElementsByTagName('b')[0],0).collapse(true);
+              range.select();
+
+            var nativeRange  = editor.document.selection.createRange();
+            nativeRange.pasteHTML('aa');
+
+            equals(getHTML(editor.document.body),'<b>aa<br></b>')
+             editor.setContent('<b>xx</b>');
+
+            range.setStartBefore(editor.document.getElementsByTagName('b')[0]).collapse(true);
+            range.select();
+            var nativeRange  = editor.document.selection.createRange();
+            nativeRange.pasteHTML('aa');
+            manualDeleteFillData()
+            equals(getHTML(editor.document.body),'aa<b>xx</b>')
+
+            editor.setContent('<table><tr><td>xxx</td><td>xxxx</td></tr></table>');
+            range.selectNodeContents(editor.document.body);
+            range.select();
+
+            editor.setContent('<img src="http://www.baidu.com/img/logo-yy.gif" />');
+            range.selectNode(editor.document.getElementsByTagName('img')[0]);
+            range.select();
+
+            range = editor.selection.getRange();
+            same(trans(range),{
+                startContainer : editor.document.body,
+                startOffset : 0,
+                endContainer : editor.document.body,
+                endOffset : 1
+            })
+
+            editor.setContent('<b>xxxx</b>');
+            range.setStart(editor.document.getElementsByTagName('b')[0],0).collapse(true).select();
+            range = editor.selection.getRange();
+            same(trans(range),{
+                startContainer : editor.document.getElementsByTagName('b')[0].firstChild,
+                startOffset : 0,
+                endContainer : editor.document.getElementsByTagName('b')[0].firstChild,
+                endOffset : 0
+            });
+            range.setStart(editor.document.getElementsByTagName('b')[0],1).collapse(true).select();
+            range = editor.selection.getRange();
+
+
+            range.insertNode(editor.document.createTextNode('aa'));
+            manualDeleteFillData();
+            equals(getHTML(editor.document.body),'<b>xxxxaa</b>')
+        }else{
+
+               editor.setContent('<b><br/></b>');
+            range.setStart(editor.document.getElementsByTagName('b')[0],0).collapse(true);
+
+            range.select();
+            var nativeRange  = editor.window.getSelection().getRangeAt(0);
+            nativeRange.insertNode(editor.document.createTextNode('aa'));
+
+            equals(getHTML(editor.document.body),'<b>aa<br></b>');
+            editor.setContent('<b></b>');
+            range.setStart(editor.document.getElementsByTagName('b')[0],0).collapse(true);
+
+            range.select();
+
+            var nativeRange  = editor.window.getSelection().getRangeAt(0);
+            nativeRange.insertNode(editor.document.createTextNode('aa'));
+            equals(getHTML(editor.document.body),'<b>aa</b>');
+
+            editor.setContent('<b></b>');
+
+            range.setStartBefore(editor.document.getElementsByTagName('b')[0]).collapse(true);
+
+            range.select();
+
+            var nativeRange  = editor.window.getSelection().getRangeAt(0);
+            nativeRange.insertNode(editor.document.createTextNode('aa'));
+
+
+            editor.setContent('<table><tr><td>xxx</td><td>xxxx</td></tr></table>');
+            range.selectNodeContents(editor.document.body);
+            range.select();
+
+            editor.setContent('<img src="http://www.baidu.com/img/logo-yy.gif" />');
+            range.selectNode(editor.document.getElementsByTagName('img')[0]);
+            range.select()
+
+        }
+
+    })
+</script>

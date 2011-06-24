@@ -1,0 +1,6 @@
+blockquote {
+    border: 1px solid #f5deb3;
+}
+body{
+    word-wrap: break-word;
+}

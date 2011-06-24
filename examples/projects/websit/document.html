@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>04-document</title>
+<link rel="stylesheet" href="css/public.css" type="text/css">
+<link rel="stylesheet" href="css/document.css" type="text/css">
+</head>
+<body>
+
+<div class="container">
+	
+	<div class="bananer"></div>
+	<div class="con">
+	
+		<h3 class="m30">Command identifiers</h3>
+		<div class="con-p">
+			<p class="l22 C75">TinyMCE uses commands to perform RTE actions, such as making the selected text bold or italic. There are two major types of commands, "global commands" and "instance commands". Global commands are independent of any editor instance (focusing a specific editor or adding a new editor to a textarea, for example). Instance commands are for a specific editor instance (making the current selection in a specific editor bold, for example).</p>
+		</div>
+		<h3 class="c00">Invoking commands</h3>
+		<div class="con-p">
+			<p class="l22 C75">There are a couple of methods for invoking these commands.</p>
+			<table class="con-table" cellPadding="0" cellSpacing="1">
+				<tr>
+					<th>功能</th>
+					<th>说明</th>
+					<th>命令</th>
+					<th>参数</th>
+					<th>返回值</th>
+					<th>需要引入文件(*.js)</th>
+				</tr>
+				<tr>
+					<td>bold</td>
+					<td>切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+					<td>execCommand(cmdName)</td>
+					<td>cmdName="bold"</td>
+					<td>true/false</td>
+					<td><code>basestyle</code></td>
+				</tr>
+			</table>
+		</div>
+		<h3 class="c00">Plugins</h3>
+		<div class="con-p">
+			<table class="con-table" cellPadding="0" cellSpacing="1">
+				<tr><th>功能说明</th><th>构造编辑器时配置参数</th><th>需要引入文件(*.js)</th></tr>
+				<tr><td>当输入内容超过编辑器高度时,编辑器会自动增高</td><td>无</td><td>autoheight</td></tr>
+				<tr><td>设置回车标签,默认为br</td><td>enterTag: "p"</td><td>enterkey</td></tr>
+				<tr><td>修复chrome下图片不能点击的问题</td><td>无</td><td>fiximgclick</td></tr>
+				<tr><td>处理特殊键的兼容性问题</td><td>无</td><td>keystrokes</td></tr>
+				<tr><td>可以进行粘贴操作</td><td>无</td><td>paste</td></tr>
+				<tr><td>过滤html标签,rule为对象分为白名单和黑名单,详情请看示例demo</td><td>serialize：rule</td><td>serialize</td></tr>
+				<tr><td>快捷键</td><td>无</td><td>shortcutkeys</td></tr>
+				<tr><td>对表格操作</td><td>无</td><td>table</td></tr>
+				<tr><td>使编辑器具有前进后退的功能</td><td>无</td><td>undo</td></tr>
+			</table>
+			
+			
+		</div>
+		<h3 class="m30">Remarks</h3>
+		<div class="con-p">
+			<p class="l22 C75">若上表中指出命令需要传参数，则请在调用execCommand时第二个参数给出（和浏览器原生的不太一样）</p>
+			<p class="l22 C75">若上表指出命令参数有默认值，则可以不用传第二个参数</p>
+			<p class="l22 C75">对于上表中未列出的command会自动调用<a class="link" href="https://developer.mozilla.org/en/rich-text_editing_in_mozilla">浏览器原生的execComand</a>处理</p>
+		</div>
+	
+	</div>
+</div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>插入图片</title>
+        <script type="text/javascript" src="../internal.js"></script>
+        <style type="text/css">
+            *{color: #838383}
+            body {
+                font-size: 12px;
+                width:362px;
+                height: 163px;
+                overflow: hidden;
+                margin:0px;padding:0px;
+            }
+            .content{
+                padding-left: 15px;
+                height:100%;
+            }
+            .labels{
+                color:#CCC;
+                height:32px;
+                line-height:32px
+            }
+            input{
+                height:21px;
+                line-height:21px;
+            }
+            #web table{padding:0px;margin:0px;position:relative}
+            #web table tr{padding:0px;margin:0px; list-style: none;height: 30px; line-height: 30px;}
+            
+            #web span{ padding-right:4px;}
+            .content input{ width:145px;height:21px;background: #FFF;border:1px solid #d7d7d7;padding: 0px; margin: 0px; }
+            #url{width:290px;}
+
+            #thumb{width:100px;height:100px;position:absolute;top:70px;left:240px;background:#ECECEC;padding:5px;overflow: auto}
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="labels">
+                <span targetDiv="web">插入网络图片</span>
+            </div>
+            <div id="web">
+                
+                <table cellpadding="0" cellspacing="0">
+
+                    <tr>
+                        <td><span>URL：</span><input id="url" type="text" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td><span>宽度：</span><input type="text" id="imgWidth" /> px </td>
+                    </tr>
+
+                    <tr>
+                        <td> <span>高度：</span><input type="text" id="imgHeight" /> px</td>
+                    </tr>
+
+                    <tr>
+                        <td><span>标题：</span><input type="text" id="imgTitle" /></td>
+                    </tr>
+                    <tr>
+                        <td> <span>对齐方式：</span>
+                            <select id="float">
+                                <option value="">默认</option>
+                                <option value="float: left">左浮动</option>
+                                <option value="float: right">右浮动</option>
+                                <option value="display: block">独占一行</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                </table>
+                <div id="thumb"></div>
+
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            
+            var nodeStart = editor.selection.getStart(),image = {};
+            var img = parent.baidu.editor.dom.domUtils.findParentByTagName(nodeStart,"img",true);
+            if(img){
+                image = img;
+            }
+            function G (id){
+                return document.getElementById(id);
+            }
+            function jbind(obj,evt,fun){
+                if(obj.addEventListener){  // firefox,w3c
+                    obj.addEventListener(evt,fun,false);
+                }else{// ie
+                    obj.attachEvent("on"+evt,function(){fun.apply(obj);});
+                }
+            }
+            function suo(img,   tWidth,   tHeight){
+                if(img.height>tHeight || img.width>tWidth){
+                    if (tWidth >= tHeight){
+                        img.height = parseInt(Math.floor(parseFloat(img.height) * (parseFloat(tWidth)/parseFloat(img.width))));
+                        img.width=tWidth;
+                    }else{
+                        img.width = parseInt(Math.floor(parseFloat(img.width) * (parseFloat(tHeight)/ parseFloat(img.height))));
+                        img.height=tHeight;
+                    }
+                }
+            }
+            //初始化图片
+            function initImg(){
+                if(image.src){
+                    G("url").value = image.src ? image.src.replace("&amp;","&") : "";
+                    G("imgTitle").value = image.title ? image.title : "";
+                    var url = G("url").value,
+                    preImg = G("thumb"),
+                    pimg = "<img src='"+G("url").value+"' title='"+image.title+"' />";
+                    preImg.innerHTML = pimg;
+                    var myimg = document.getElementsByTagName("img")[0];
+                    suo(myimg,100,100);
+                    myimg.setAttribute("width",image.width);
+                    myimg.setAttribute("height",image.height);
+                    G("imgWidth").value = myimg.width;
+                    G("imgHeight").value = myimg.height;
+                    var style = image.style.cssText;
+                    var reg = style && style.split(":")[1].replace(/^\s+|\s+|;+|；+$/g,"");
+                    switch(reg){
+                        case "left":
+                            G("float").value = "float: left";
+                            break;
+                        case "right" :
+                            G("float").value = "float: right";
+                            break;
+                        case "block" :
+                            G("float").value = "display: block";
+                            break;
+                    }
+                }
+
+            }
+            initImg();
+    
+            if(parent.baidu.editor.browser.ie){
+                G("url").onpropertychange = function(){
+                    var url = G("url").value,
+                    preImg = G("thumb");
+                    if(!/\.(png|gif|jpg|jpeg|bmp)$/ig.test(url)){
+                        preImg.innerHTML = "";
+                        G("imgWidth").value = "";
+                        G("imgHeight").value = "";
+                        return false;
+                    }else{
+                        preImg.innerHTML = "图片正在加载。。。";
+                        preImg.innerHTML = "<img src='"+url+"' />";
+                        var pimg = preImg.childNodes[0];
+                        pimg.onload = function(){
+                            suo(this,100,100);
+                            G("imgWidth").value = pimg.width ? pimg.width : 0;
+                            G("imgHeight").value = pimg.height ? pimg.height : 0;
+                        }
+                        pimg.onerror = function(){
+                            preImg.innerHTML = "图片不存在";
+                            G("imgWidth").value = 0;
+                            G("imgHeight").value = 0;
+                        }
+                    }
+                };
+            }else{
+                G("url").addEventListener("input",function(){
+                    var url = G("url").value,
+                    preImg = G("thumb");
+                    if(!/\.(png|gif|jpg|jpeg|bmp)$/ig.test(url)){
+                        preImg.innerHTML = "";
+                        G("imgWidth").value = "";
+                        G("imgHeight").value = "";
+                        return false;
+                    }else{
+                        preImg.innerHTML = "图片正在加载。。。";
+                        var pimg = document.createElement("img");
+                        pimg.src = url;
+                        pimg.onload = function(){
+                            suo(this,100,100);
+                            G("imgWidth").value = pimg.width ? pimg.width : 0;
+                            G("imgHeight").value = pimg.height ? pimg.height : 0;
+                            preImg.innerHTML = "";
+                            preImg.appendChild(pimg);
+                        }
+                        pimg.onerror = function(){
+                            preImg.innerHTML = "图片不存在";
+                            G("imgWidth").value = 0;
+                            G("imgHeight").value = 0;
+                        }
+                    }
+                },false);
+            }
+
+            G("imgWidth").onblur = function(){
+                var myimg = document.getElementsByTagName("img")[0];
+                var width = G("imgWidth").value;
+                if(myimg && !isNaN(width) && /^(([1-9]+)|([1-9]+\d*))/.test(width)){
+                    myimg.setAttribute("width",width);
+                }
+            };
+            G("imgHeight").onblur = function(){
+                var myimg = document.getElementsByTagName("img")[0];
+                var height = G("imgHeight").value;
+                if(myimg && !isNaN(height) && /^(([1-9]+)|([1-9]+\d*))/.test(height)){
+                    myimg.setAttribute("height",height);
+                }
+            };
+            G("imgTitle").onblur = function(){
+                var myimg = document.getElementsByTagName("img")[0];
+                if(G("imgTitle").value){
+                    myimg.setAttribute("title",G("imgTitle").value);
+                }
+            }
+            dialog.onok = function (){
+                var myimg = document.getElementsByTagName("img")[0];
+                var url = G("url").value;
+                var width = G("imgWidth").value;
+                var height = G("imgHeight").value;
+                if(isNaN(width) || !/^(([1-9]+)|([1-9]+\d*))/.test(width)){
+                    alert("请输入正确的宽度");
+                    return false;
+                }else{
+                    myimg.setAttribute("width",width);
+                }
+                if(isNaN(height) || !/^(([1-9]+)|([1-9]+\d*))/.test(height)){
+                    alert("请输入正确的高度");
+                    return false;
+                }else{
+                    myimg.setAttribute("height",height);
+                }
+                if(!/\.(png|gif|jpg|jpeg|bmp)$/ig.test(url)){
+                    alert("请输入正确的url");
+                    return false;
+                }else{
+                    var alignType = G("float");
+                    if(!myimg){
+                        alert("图片不存在");
+                        return false;
+                    }
+                    if(G("imgTitle").value){
+                        myimg.setAttribute("title",G("imgTitle").value);
+                    }
+                    var pimgstr = G("thumb").innerHTML;
+                    if(alignType.value){
+                        pimgstr = pimgstr.replace(/<img/i,"<img style='"+alignType.value+"'");
+                    }
+                    editor.execCommand('InsertHTML', pimgstr);
+                    dialog.close();
+                    
+
+                }
+            };
+            var ipt = G("url");
+            var isIE = !!window.ActiveXObject;
+            if (isIE) {
+                setTimeout(function (){
+                    var r = ipt.createTextRange();
+                    r.collapse(false);
+                    r.select();
+                });
+            }
+            ipt.focus()
+        </script>
+    </body>
+</html>

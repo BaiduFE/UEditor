@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        code { font-family: monospace; }
+        table.commands {
+            border-collapse: collapse;
+        }
+        table.commands td, table.commands th {
+            border: 1px solid lightgreen;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="doc">
+    <div id="body">
+        <h1>execCommand Method</h1>
+        <p>editor.execCommand(cmdName: String, value: String?): void</p>
+        <hr/>
+        <h2>Commands Explanation</h2>
+        <table class="commands">
+            <tr><th>命令名</th><th>描述</th></tr>
+            <tr><td><code>Undo</code></td><td>撤销上一个操作</td></tr>
+            <tr><td><code>Redo</code></td><td>重做后一个操作</td></tr>
+            <tr><td><code>SelectAll</code></td><td>全选编辑区内容</td></tr>
+            <tr><td><code>RemoveFormat</code></td><td>清除选区文本的格式</td></tr>
+            <tr><td><code>Bold</code></td><td>切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>Italic</code></td><td>切换选区文本的斜体样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>Underline</code></td><td>切换选区文本的下划线样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>StrikeThrough</code></td><td>切换选区文本的删除线样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>Subscript</code></td><td>切换选区文本的下标样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>Superscript</code></td><td>切换选区文本的上标样式，若选区闭合（即插入符状态）效果参考word</td></tr>
+            <tr><td><code>ForeColor</code></td><td>设置选区文本的字体颜色（参数值参考css中的color，若参数使用'default'值，则表示去除字体颜色）</td></tr>
+            <tr><td><code>BackColor</code></td><td>设置选区文本的背景颜色（参数值参考css中的color，若参数使用'default'值，则表示去除背景颜色）</td></tr>
+            <tr><td><code>FontSize</code></td><td>设置选区文本的字号大小（参数值参考css中的font-size）</td></tr>
+            <tr><td><code>FontFamily</code></td><td>设置选区文本的字体（参数值参考css中的font-family）</td></tr>
+            <tr><td><code>JustifyLeft</code></td><td>将选区或插入符所在段落设置为文字左对齐</td></tr>
+            <tr><td><code>JustifyCenter</code></td><td>将选区或插入符所在段落设置为文字居中对齐</td></tr>
+            <tr><td><code>JustifyRight</code></td><td>将选区或插入符所在段落设置为文字右对齐</td></tr>
+            <tr><td><code>JustifyFull</code></td><td>将选区或插入符所在段落设置为文字两端对齐（效果参考word）</td></tr>
+            <tr><td><code>Indent</code></td><td>将选区或插入符所在段落向右缩进一定宽度，（宽度可以单独配置）</td></tr>
+            <tr><td><code>Outdent</code></td><td>将选区或插入符所在段落向左缩进一定宽度，（宽度可以单独配置）</td></tr>
+            <tr><td><code>CreateLink</code></td><td>将选区作为超链接的文本，参数作为超链接的href值，在选区位置创建一个超链接</td></tr>
+            <tr><td><code>Unlink</code></td><td>将选区所在的超链接转换为文本</td></tr>
+            <tr><td><code>InsertOrderedList</code></td><td>
+                在插入符位置插入有序列表（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）
+                <br/>可以指定列表样式（参数值参考list-style-type，默认值是'decimal'）
+            </td></tr>
+            <tr><td><code>InsertUnorderedList</code></td><td>
+                在插入符位置插入无序列表（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）
+                <br/>可以指定列表样式（参数值参考list-style-type，默认值是'disc'）
+            </td></tr>
+            <tr><td><code>InsertHTML</code></td><td>
+                在插入符位置插入HTML片段（如选区不为空，则会先remove选区内容，若选区跨越了block，则只处理第一个block内的选区）
+            </td></tr>
+        </table>
+        <h2>Remarks</h2>
+        <p>若上表中指出命令需要传参数，则请在调用execCommand时第二个参数给出（和浏览器原生的不太一样），
+            <br/>若上表指出命令参数有默认值，则可以不用传第二个参数。
+            <br/>对于上表中未列出的command会自动调用<a href="https://developer.mozilla.org/en/rich-text_editing_in_mozilla">浏览器原生的execComand</a>处理</p>
+    </div>
+</div>
+</body>
+</html>

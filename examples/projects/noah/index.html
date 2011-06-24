@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="../../editor_api.js">
+        paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+
+            'commands/basestyle.js',
+            'commands/cleardoc.js',
+            'commands/font.js',
+            'commands/list.js',
+            'commands/justify.js',
+            'commands/link.js',
+            'commands/inserthtml.js',
+            'commands/selectall.js',
+
+            'plugins/undo/undo.js',
+            'plugins/shortcutkeys/shortcutkeys.js',
+            'plugins/enterkey/enterkey.js',
+            'plugins/keystrokes/keystrokes.js',
+            'plugins/table/table.js',
+            'plugins/fiximgclick/fiximgclick.js',
+            'plugins/serialize/serialize.js',
+
+            'ui/ui.js',
+            'ui/uiutils.js',
+            'ui/uibase.js',
+            'ui/stateful.js',
+            'ui/button.js',
+            'ui/separator.js',
+            'ui/mask.js',
+            'ui/popup.js',
+            'ui/button.js',
+            'ui/menu.js',
+            'ui/splitbutton.js',
+            'ui/menubutton.js',
+            'ui/toolbar.js',
+            'ui/colorpicker.js',
+            'ui/combox.js',
+            'ui/dialog.js',
+            'ui/tablepicker.js',
+            'ui/tablebutton.js',
+            'ui/colorbutton.js'
+        ];
+    </script>
+    <link rel="stylesheet" type="text/css" href="../../resources/EDITORUI.css"/>
+    <link rel="stylesheet" type="text/css" href="../../resources/DEFAULT.css"/>
+    <style type="text/css">
+        #editor {
+            border: 1px solid #CCC;
+        }
+        #editor_toolbar_box {
+            background: url(../../resources/images/toolbar_bg.png) repeat-x bottom left;
+            padding: 2px;
+        }
+        #editor_iframe_holder {
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+        }
+        #editor_breadcrumb span {
+            text-decoration: underline;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="editor">
+    <div id="editor_toolbar_box">
+        <div id="editor_toolbar"></div>
+    </div>
+    <div id="editor_iframe_holder"></div>
+</div>
+
+<script type="text/javascript" src="editorui.js"></script>
+<script type="text/javascript">
+    var browser = baidu.editor.browser;
+    var editor = new baidu.editor.Editor({
+        initialContent: browser.ie ? "<p><br/></p>" : "<p>&nbsp;</p>"
+    });
+    var toolbar = new baidu.editor.ui.Toolbar();
+    toolbar.add(new baidu.editor.ui.ClearDoc(editor, '清楚文档'));
+    toolbar.add(new baidu.editor.ui.Undo(editor, '撤销'));
+    toolbar.add(new baidu.editor.ui.Redo(editor, '重做'));
+    toolbar.add(new baidu.editor.ui.Bold(editor, '粗体'));
+    toolbar.add(new baidu.editor.ui.Italic(editor, '斜体'));
+    toolbar.add(new baidu.editor.ui.Underline(editor, '下划线'));
+    toolbar.add(new baidu.editor.ui.StrikeThrough(editor, '删除线'));
+    toolbar.add(new baidu.editor.ui.SelectAll(editor, '全选'));
+    toolbar.add(new baidu.editor.ui.Separator());
+    toolbar.add(new baidu.editor.ui.ForeColor(editor, '字体颜色'));
+    toolbar.add(new baidu.editor.ui.BackColor(editor, '背景颜色'));
+    toolbar.add(new baidu.editor.ui.FontFamily(editor, ['宋体', '楷体', '隶书', '黑体','andale mono','arial','arial black','comic sans ms','impact','symbol','times new roman'],'字体'));
+    toolbar.add(new baidu.editor.ui.InsertOrderedList(editor, '有序列表'));
+    toolbar.add(new baidu.editor.ui.InsertUnorderedList(editor, '无序列表'));
+    toolbar.add(new baidu.editor.ui.Justify(editor, 'left','左对齐'));
+    toolbar.add(new baidu.editor.ui.Justify(editor, 'center','居中对齐'));
+    toolbar.add(new baidu.editor.ui.Justify(editor, 'right','右对齐'));
+    toolbar.add(new baidu.editor.ui.Justify(editor, 'justify','两端对齐'));
+    toolbar.add(new baidu.editor.ui.Separator());
+    toolbar.add(new baidu.editor.ui.Link(editor, '../../../src/ui/dialogs/link/link.html','链接'));
+    toolbar.add(new baidu.editor.ui.Unlink(editor, '撤销链接'));
+    toolbar.add(new baidu.editor.ui.Image(editor, '../../../src/ui/dialogs/image/image.html','图片'));
+    toolbar.add(new baidu.editor.ui.InsertTable(editor, '../../../src/ui/dialogs/table/table.html', '表格'));
+    toolbar.add(new baidu.editor.ui.InsertRow(editor, '前插入行'));
+    toolbar.add(new baidu.editor.ui.InsertCol(editor, '前插入列'));
+    toolbar.add(new baidu.editor.ui.MergeRight(editor, '右合并单元格'));
+    toolbar.add(new baidu.editor.ui.MergeDown(editor, '下合并单元格'));
+    toolbar.add(new baidu.editor.ui.DeleteRow(editor, '删除行'));
+    toolbar.add(new baidu.editor.ui.DeleteCol(editor, '删除列'));
+    toolbar.add(new baidu.editor.ui.SplittoRows(editor, '拆分成行'));
+    toolbar.add(new baidu.editor.ui.SplittoCols(editor, '拆分成列'));
+    toolbar.add(new baidu.editor.ui.SplittoCells(editor, '完全拆分单元格'));
+    toolbar.add(new baidu.editor.ui.MergeCells(editor, '合并多个单元格'));
+    toolbar.add(new baidu.editor.ui.DeleteTable(editor, '删除表格'));
+    toolbar.render('editor_toolbar');
+    editor.render('editor_iframe_holder');
+</script>
+</body>
+</html>

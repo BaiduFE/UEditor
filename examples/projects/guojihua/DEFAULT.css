@@ -1,0 +1,179 @@
+/*--reset--*/
+html,body,div,h1,h2,h3,h4,h5,h6,p,table,td,tr,ul,ol,li,dl,dd,dt,img,form{margin:0;padding:0;}
+ol,ul,li{list-style:none}
+
+body{margin:8px;}
+
+/*
+ * default theme
+ */
+#editor_main {
+    border: 1px solid #CCC;
+}
+#editor_toolbar {
+    padding: 2px;
+    background:url(../../resources/images/toolbar_bg.png);
+}
+#editor_iframe_holder {
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+}
+.edui-popup {
+    position:absolute;
+}
+/* toolbar button */
+.edui-toolbar .edui-button .edui-button-body,
+.edui-toolbar .edui-splitbutton .edui-button-body {
+    height: 20px;
+    width: 20px;
+    background-image: url(../../resources/images/icons.png);
+    _background-image: url(../../resources/images/icons.gif);
+}
+div.edui-box {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+.edui-toolbar .edui-button .edui-button-wrap {
+    padding: 1px;
+}
+.edui-toolbar .edui-button .edui-state-hover .edui-button-wrap {
+    background-image:url(../../resources/images/toolbar_icon_checked.png);
+}
+.edui-toolbar .edui-button .edui-state-disabled .edui-button-body {
+    opacity: 0.3;
+    -ms-filter: 'alpha(opacity=30)';
+    filter: alpha(opacity=30);
+}
+.edui-toolbar .edui-button .edui-state-active .edui-button-body {
+    background-color: #D2DBF0;
+}
+.edui-toolbar .edui-for-undo .edui-button-body {
+    background-position: -160px 0;
+}
+.edui-toolbar .edui-for-redo .edui-button-body {
+    background-position: -100px 0;
+}
+.edui-toolbar .edui-for-bold .edui-button-body {
+    background-position: 0 0;
+}
+.edui-toolbar .edui-for-italic .edui-button-body {
+    background-position: -60px 0;
+}
+.edui-toolbar .edui-for-underline .edui-button-body {
+    background-position: -140px 0;
+}
+.edui-toolbar .edui-for-insertorderedlist .edui-button-body {
+    background-position: -80px 0;
+}
+.edui-toolbar .edui-for-insertunorderedlist .edui-button-body {
+    background-position: -20px 0;
+}
+.edui-toolbar .edui-for-directionalityltr .edui-button-body {
+    background-position: -20px -20px;
+}
+.edui-toolbar .edui-for-directionalityrtl .edui-button-body {
+    background-position: -40px -20px;
+}
+.edui-toolbar .edui-button .edui-state-active .edui-button-body {
+    background-color: #D2DBF0;
+}
+/* toolbar splitbutton */
+.edui-toolbar .edui-splitbutton-body .edui-arrow {
+    background: url(../../resources/images/icons.png) -741px 0;
+    _background: url(../../resources/images/icons.png) -741px 0;
+    height: 20px;
+    width: 8px;
+}
+.edui-toolbar .edui-splitbutton .edui-splitbutton-body {
+    border: 1px solid #F0F0EE;
+}
+.edui-toolbar .edui-splitbutton .edui-splitbutton-body .edui-arrow {
+    border-left: 1px solid #F0F0EE;
+}
+.edui-toolbar .edui-splitbutton .edui-state-hover .edui-splitbutton-body {
+    background-color: #B2BBD0;
+    border: 1px solid #0A246A;
+}
+.edui-toolbar .edui-splitbutton .edui-state-hover .edui-splitbutton-body .edui-arrow {
+    border-left: 1px solid #0A246A;
+}
+
+.edui-toolbar .edui-splitbutton .edui-state-disabled .edui-splitbutton-body .edui-button-body,
+.edui-toolbar .edui-splitbutton .edui-state-disabled .edui-splitbutton-body .edui-arrow {
+    opacity: 0.3;
+    -ms-filter: 'alpha(opacity=30)';
+    _filter: alpha(opacity=30);
+}
+.edui-toolbar .edui-splitbutton .edui-state-opened .edui-splitbutton-body {
+    background-color: white;
+    border: 1px solid gray;
+}
+.edui-toolbar .edui-splitbutton .edui-state-opened .edui-splitbutton-body .edui-arrow {
+    border-left: 1px solid white;
+}
+.edui-toolbar .edui-for-insertorderedlist .edui-state-opened .edui-splitbutton-body,
+.edui-toolbar .edui-for-insertunorderedlist .edui-state-opened .edui-splitbutton-body {
+    background-color: #f1f1f1;
+    border: 1px solid gray;
+}
+.edui-toolbar .edui-for-insertorderedlist .edui-state-opened .edui-splitbutton-body .edui-arrow,
+.edui-toolbar .edui-for-insertunorderedlist .edui-state-opened .edui-splitbutton-body .edui-arrow {
+    border-left: 1px solid #f1f1f1;
+}
+.edui-for-insertorderedlist .edui-bordereraser,
+.edui-for-insertunorderedlist .edui-bordereraser {
+    background-color: #f1f1f1;
+}
+
+/* menu */
+.edui-menu {
+    z-index: 3000;
+}
+.edui-menu .edui-popup-content {
+    background-color: #f1f1f1;
+    padding: 3px;
+}
+.edui-menu-body {
+    background: url("../../resources/images/menu/sparator_v.png") repeat-y 25px;
+}
+.edui-menuitem {
+    height: 20px;
+    _width: 150px;
+    min-width: 150px;
+    cursor: default;
+    vertical-align: top;
+}
+.edui-menuitem .edui-label {
+    font-size: 12px;
+    line-height: 22px;
+    height: 20px;
+    margin-left: 30px;
+    padding-right: 20px;
+}
+.edui-state-checked .edui-menuitem-body {
+    background: url("../../resources/images/menu/tick.gif") no-repeat 5px 5px;
+}
+.edui-hassubmenu .edui-menuitem-body .edui-label {
+    background: url("../../resources/images/menu/arrow.gif") no-repeat 110px 7px;
+}
+.edui-menu-body .edui-menuitem {
+    padding: 1px;
+}
+.edui-menu-body .edui-state-hover {
+    padding: 0 !important;
+    border: 1px solid #aecff7;
+    background-color: #dbeef7;
+}
+ul.edui-box {
+    list-style-type: none;
+}
+.edui-box {
+    border: medium none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+.edui-state-checked .edui-button-body {
+    background-color: #C2CBE0;
+}

@@ -1,0 +1,20 @@
+/* document */
+.bananer{
+	height:3px;margin-bottom:6px;background:#efefef;font-size:3px;line-height:3px;
+}
+.con{height:auto}
+.con-p{
+	margin:0 10px 0 25px;
+}
+.con-table{
+	width:95%;
+	color:#525252;
+	border:0px;padding:0px;margin:0px;
+	background:#e4e4e4;
+}
+.con-table  th{
+	color:#FFF;font-size:14px;background:#658fd0;text-align:left;padding:0px 7px;line-height:28px;
+}
+.con-table  td{
+	background:#fafafa;padding:0px 7px;line-height:20px;
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        var paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+
+            //引入插件命令
+            'plugins/enterkey/enterkey.js',
+            'plugins/paste/paste.js',
+
+            //引入命令函数
+            'commands/source.js'
+        ];
+        (function(){
+            var i = -1,baseURL = '../../src/',//基础路径
+                absolute;
+            while(i++ < paths.length-1){
+                absolute = baseURL + paths[i];
+                document.write("<script type='text/javascript' charset='utf-8' src='"+absolute+"'><\/script>");
+            }
+        })()
+    </script>
+    <style type="text/css">
+        #editor {
+            border: 1px solid #CCC;
+            width:400px;
+            float:left;
+            margin-left:20px;
+        }
+        #editor_toolbar_box {
+            background: #F0F0EE;
+            padding: 2px;
+        }
+        #editor_iframe_holder {
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+        }
+        .left {
+            float:left;
+        }
+        .content{
+            width:300px;
+            height:200px;
+            border:1px solid #2e8b57;
+            padding:5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="left">
+        
+        <select id="enterTag" onchange="createEditor()">
+            <option>选择编辑器插件</option>
+            <option value="br">回车使用br标签</option>
+            <option value="p">回车使用p标签</option>
+            <option value="paste">粘贴纯文本插件</option>
+        </select>
+        <div id="showSource" class="content">
+
+        </div>
+    </div>
+    <div id="editor">
+        <div id="editor_toolbar_box">
+            <div id="editor_toolbar">
+                <input type="button" value="查看源码" onclick="myeditor.execCommand('source')"/>
+            </div>
+        </div>
+        <div id="editor_iframe_holder"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        var myeditor;
+        //创建编辑器
+        function createEditor(){
+            var enterTag = document.getElementById("enterTag").value;
+            var option = changeOption();
+            myeditor = new baidu.editor.Editor(option);
+            myeditor.render('editor_iframe_holder');
+            document.getElementById("showSource").innerHTML = option.showText;
+        }
+        if(!myeditor){
+            myeditor = new baidu.editor.Editor({
+                initialContent: 'hello world'//初始化编辑器的内容
+            });
+            //渲染编辑器
+            myeditor.render('editor_iframe_holder');
+            document.getElementById("showSource").innerHTML = "//创建编辑器：<br>myeditor = new baidu.editor.Editor({<br>initialContent: 'hello world'<br>});";
+        }
+        function changeOption(){
+            var plugs = document.getElementById("enterTag");
+            var option = {
+                initialContent : "编辑器  hello world"
+            };
+            switch(plugs.value){
+                case "br":
+                    option.plugins = ['enterkey'];
+                    option.enterTag = "br";
+                    option.showText = "//创建编辑器：<br>myeditor = new baidu.editor.Editor({<br>plugins : ['enterkey'],<br>enterTag : "+option.enterTag+"<br>});";
+                    break;
+                case "p" :
+                    option.plugins = ['enterkey'];
+                    option.enterTag = "p";
+                    option.showText = "//创建编辑器：<br>myeditor = new baidu.editor.Editor({<br>plugins : ['enterkey'],<br>enterTag : "+option.enterTag+"<br>});";
+                    break;
+                case "paste" :
+                    option.plugins = ['paste'];
+                    option.pasteplain = true;
+                    option.showText = "//创建编辑器：<br>myeditor = new baidu.editor.Editor({<br>plugins : ['paste'],<br>pasteplain : "+option.pasteplain+"<br>});";
+                    break;
+                default :
+                    option.showText = "//创建编辑器：<br>myeditor = new baidu.editor.Editor({<br>initialContent: 'hello world'<br>});";
+            }
+            return option;
+        }
+
+    </script>
+</body>
+</html>

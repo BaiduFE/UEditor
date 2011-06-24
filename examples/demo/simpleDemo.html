@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        var paths = [
+            //引入编辑器核心代码
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+            //引入命令
+            'commands/basestyle.js'
+        ];
+        (function(){
+            var i = -1,baseURL = '../../src/',//基础路径
+                absolute;
+            while(i++ < paths.length-1){
+                absolute = baseURL + paths[i];
+                document.write("<script type='text/javascript' charset='utf-8' src='"+absolute+"'><\/script>");
+            }
+        })()
+    </script>
+    <style type="text/css">
+        #editor {
+            border: 1px solid #CCC;
+        }
+        #editor_toolbar_box {
+            background: #F0F0EE;
+            padding: 2px;
+        }
+        #editor_iframe_holder {
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor">
+        <div id="editor_toolbar_box">
+            <div id="editor_toolbar">
+                <input type="button" value="加粗" onclick="myeditor.execCommand('bold')"/>
+                <input type="button" value="获得编辑器内容" onclick="alert(myeditor.getContent())"/>
+            </div>
+        </div>
+        <div id="editor_iframe_holder"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        var option = {
+            initialContent: 'hello world'//初始化编辑器的内容
+            //initialStyle: ''             //编辑器初始化样式
+            //iframeCssUrl: ''            //给iframe样式的路径
+            //enterTag : 'p'              //输入回车时使用p标签
+        };
+        var myeditor = new baidu.editor.Editor(option);
+        myeditor.render('editor_iframe_holder');
+    </script>
+</body>
+</html>

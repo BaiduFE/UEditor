@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" charset="utf-8" src="editor_api.js">
+        paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+            'commands/basestyle.js',
+            'commands/inserthtml.js',
+            'commands/justify.js',
+            'commands/font.js',
+            'commands/link.js',
+            'commands/removeformat.js',
+            'commands/blockquote.js',
+            'commands/list.js',
+
+            'commands/print.js',
+            'commands/preview.js',
+            'commands/selectall.js',
+            'commands/paragraph.js',
+            'commands/directionality.js',
+            'commands/horizontal.js',
+            'commands/time.js',
+            'commands/searchreplace.js',
+            'commands/inserthtml.js',
+            'commands/elementpath.js',
+            'commands/cleardoc.js',
+           
+            'plugins/undo/undo.js',
+            'plugins/paste/paste.js',
+            'plugins/source/source.js',
+            'plugins/shortcutkeys/shortcutkeys.js',
+            'plugins/enterkey/enterkey.js',
+            'plugins/keystrokes/keystrokes.js',
+            'plugins/fiximgclick/fiximgclick.js',
+//            'plugins/filter/filter.js',
+//            'plugins/filter/filter_word.js',
+            'plugins/autoheight/autoheight.js',
+            'plugins/serialize/serialize.js',
+            'plugins/video/video.js',
+            'plugins/table/table.js',
+            'ui/ui.js',
+            'ui/uiutils.js',
+            'ui/uibase.js',
+            'ui/separator.js',
+            'ui/mask.js',
+            'ui/popup.js',
+            'ui/colorpicker.js',
+            'ui/tablepicker.js',
+            'ui/stateful.js',
+            'ui/button.js',
+            'ui/splitbutton.js',
+            'ui/colorbutton.js',
+            'ui/tablebutton.js',
+            'ui/toolbar.js',
+            'ui/menu.js',
+            'ui/combox.js',
+            'ui/dialog.js',
+            'ui/menubutton.js',
+            'ui/editorui.js',
+            'ui/editor.js'
+        ];
+    </script>
+    <link rel="stylesheet" type="text/css" href="resources/EDITORUI.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/DEFAULT.css"/>
+    <style type="text/css">
+        #editor {
+            width: 640px;
+        }
+    </style>
+</head>
+<body>
+<div id="editor">
+</div>
+<script type="text/javascript">
+    var editor = new baidu.editor.ui.Editor({
+        id: 'editor',
+        initialContent: '通用编辑器ui示例',
+        initialStyle :'.selectTdClass{background-color:#3399FF !important}',
+        minFrameHeight: 320
+//        ui: {
+//            toolbars: [
+//                ['Bold', 'Italic', 'Underline']
+//            ]
+//        }
+    });
+    editor.render('editor');
+</script>
+</body>
+</html>

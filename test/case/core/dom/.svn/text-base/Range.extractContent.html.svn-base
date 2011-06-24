@@ -1,0 +1,458 @@
+<!doctype html>
+<html>
+<head>
+    <title>extractContent</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+</head>
+
+<body>
+<h1 id="qunit-header">Range.extractContent Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test">
+</div>
+
+
+<script src="../../../../src/editor.js" type="text/javascript"></script>
+<script src="../../../../src/core/utils.js" type="text/javascript"></script>
+<script src="../../../../src/core/browser.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+</body>
+</html>
+<script>
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd;
+    range = new baidu.editor.dom.Range( document );
+    module( "Range" );
+    function getHTML( co ) {
+        var div = document.createElement( 'div' ), h;
+
+        if ( !co )
+            return 'null';
+
+        div.appendChild( co.cloneNode( true ) );
+        h = div.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    ;
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+    var div = document.getElementById( 'test' ),
+
+            range = new baidu.editor.dom.Range( document );
+
+    test( 'cloneContents', function() {
+        if ( baidu.editor.browser.gecko ) {
+            var  nativeRange = document.createRange();
+            div.innerHTML = '<b>xxxx</b>xxxx';
+            nativeRange.setStart( div.firstChild, 1 );
+            nativeRange.setEnd( div, 1 );
+
+            range.setStart( div.firstChild, 1 ).setEnd( div, 1 );
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+             nativeRange.setStart( div, 0 );
+            nativeRange.setEnd( div.firstChild.firstChild, 1 );
+            range.setStart(  div, 0 ).setEnd( div.firstChild.firstChild, 1 );
+
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+            nativeRange.setStart( div.firstChild.firstChild, 2 );
+           nativeRange.setEnd( div, 2 );
+           range.setStart(  div.firstChild.firstChild, 2).setEnd( div, 2 );
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+            nativeRange.setStart( div.firstChild.firstChild, 0 );
+            nativeRange.setEnd( div.firstChild.firstChild, 4 );
+            range.setStart( div.firstChild.firstChild, 0 ).setEnd( div.firstChild.firstChild, 4 )
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+            div.innerHTML = '<b>xxxx</b>xxxx<b>c22c</b>';
+            nativeRange.setStart( div.firstChild, 1 );
+            nativeRange.setEnd( div.lastChild, 1 )
+            range.setStart( div.firstChild, 1 ).setEnd( div.lastChild, 1 );
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+            nativeRange.setStart( div.firstChild.firstChild, 1 );
+            nativeRange.setEnd( div.lastChild.firstChild, 1 )
+            range.setStart( div.firstChild.firstChild, 1 ).setEnd( div.lastChild.firstChild, 1 );
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+            div.innerHTML = '<b>xxxx<i id="ii">cccc</i><img/></b>xxx';
+            nativeRange.setStart(div.firstChild.firstChild,2);
+            nativeRange.setEnd(div,2);
+            range.setStart(div.firstChild.firstChild,2).setEnd(div,2);
+
+
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+            nativeRange.setStart(document.getElementById('ii').firstChild,2);
+            nativeRange.setEnd(div,2);
+            range.setStart(document.getElementById('ii').firstChild,2).setEnd(div,2);
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+
+
+            div.innerHTML = 'xxx<b>xxxx<i id="ii">cccc</i><img/></b>xxx';
+           nativeRange.setStart(div,0);
+           nativeRange.setEnd(document.getElementById('ii').firstChild,2);
+           range.setStart(div,0).setEnd(document.getElementById('ii').firstChild,2);
+            equals( getHTML( range.cloneContents() ), getHTML( nativeRange.cloneContents() ) );
+        }
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+        var r = range;
+        r.setStart( document.getElementById( 'first' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'two' ).firstChild, 2 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">ab</td></tr></tbody></table>' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 2 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'two' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'last' ).firstChild, 2 );
+
+        equals( getHTML( r.cloneContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 2 )
+        equals( r.collapsed, false )
+
+        r.setStart( document.getElementById( 'two' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'last' ).firstChild, 2 );
+
+        equals( getHTML( r.cloneContents() ), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 2 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'first' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'first' ).lastChild, 4 );
+
+        equals( getHTML( r.cloneContents() ), 'irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> str' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 4 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'first' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'first' ).firstChild, 4 );
+
+        equals( getHTML( r.cloneContents() ), 'irs' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 4 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'first' ), 0 );
+        r.setEnd( document.getElementById( 'last' ), 0 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 0 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, 0 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'first' ), 1 );
+        r.setEnd( document.getElementById( 'last' ), 1 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first"><!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc</p>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, 1 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'test' ), 0 );
+        r.setEnd( document.getElementById( 'test' ), document.getElementById( 'test' ).childNodes.length - 1 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 0 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, document.getElementById( 'test' ).childNodes.length - 1 )
+        equals( r.collapsed, false )
+
+        r.setStart( document.getElementById( 'first' ), 0 );
+        r.setEnd( document.getElementById( 'last' ).firstChild, 1 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">t</p>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 0 )
+        equals( r.endContainer.nodeType, 3 )
+        equals( r.endOffset, 1 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'first' ).firstChild, 1 );
+        r.setEnd( document.getElementById( 'last' ), 0 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">irst<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\"></p>' )
+        equals( r.startContainer.nodeType, 3 )
+        equals( r.startOffset, 1 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, 0 )
+        equals( r.collapsed, false )
+
+
+        r.setStart( document.getElementById( 'test' ), 0 );
+        r.setEnd( document.getElementById( 'traverse' ), 2 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em></p>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 0 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, 2 )
+        equals( r.collapsed, false )
+
+        r.setStart( document.getElementById( 'test' ), 0 );
+        r.setEnd( document.getElementById( 'traverse' ), 1 );
+
+        equals( getHTML( r.cloneContents() ), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b></p>' )
+        equals( r.startContainer.nodeType, 1 )
+        equals( r.startOffset, 0 )
+        equals( r.endContainer.nodeType, 1 )
+        equals( r.endOffset, 1 )
+        equals( r.collapsed, false )
+
+    } )
+
+    test( 'extractContents', function() {
+        function trans( range ) {
+            return {
+                startContainer:range.startContainer.id,
+                startOffset : range.startOffset,
+                endContainer:range.endContainer.id,
+                endOffset : range.endOffset
+            }
+        }
+        if ( baidu.editor.browser.gecko ) {
+            var  nativeRange = document.createRange();
+            div.innerHTML = '<b id="a">xxxx</b>xxxx';
+            nativeRange.setStart( div.firstChild, 1 );
+            nativeRange.setEnd( div, 1 );
+            var nativeFrag = nativeRange.extractContents();
+            var nativeObj = trans(nativeRange);
+            div.innerHTML = '<b id="a">xxxx</b>xxxx';
+
+            range.setStart( div.firstChild, 1 ).setEnd( div, 1 );
+
+            equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+            same(trans(range),nativeObj);
+
+
+            div.innerHTML = '<b id="a">xxxx</b>xxxx';
+            nativeRange.setStart( div, 0);
+            nativeRange.setEnd( div.firstChild.firstChild, 1 );
+            var nativeFrag = nativeRange.extractContents();
+            var nativeObj = trans(nativeRange);
+            div.innerHTML = '<b id="a">xxxx</b>xxxx';
+
+            range.setStart(div, 0).setEnd( div.firstChild.firstChild, 1 );
+
+            equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+            same(trans(range),nativeObj);
+
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx';
+           nativeRange.setStart( div.firstChild.firstChild, 2);
+           nativeRange.setEnd( div, 2 );
+           var nativeFrag = nativeRange.extractContents();
+           var nativeObj = trans(nativeRange);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx';
+
+           range.setStart(div.firstChild.firstChild, 2).setEnd( div, 2 );
+
+           equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+           same(trans(range),nativeObj);
+
+
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx';
+           nativeRange.setStart( div.firstChild.firstChild, 0);
+           nativeRange.setEnd( div.firstChild.firstChild, 4  );
+           var nativeFrag = nativeRange.extractContents();
+           var nativeObj = trans(nativeRange);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx';
+
+           range.setStart(div.firstChild.firstChild, 0 ).setEnd( div.firstChild.firstChild, 4 );
+
+           equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+           same(trans(range),nativeObj);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx<b id="b">c22c</b>';
+           nativeRange.setStart( div.firstChild, 1);
+           nativeRange.setEnd( div.lastChild, 1  );
+           var nativeFrag = nativeRange.extractContents();
+           var nativeObj = trans(nativeRange);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx<b id="b">c22c</b>';
+
+           range.setStart(div.firstChild, 1 ).setEnd( div.lastChild, 1 );
+
+           equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+           same(trans(range),nativeObj);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx<b id="b">c22c</b>';
+           nativeRange.setStart( div.firstChild.firstChild, 1);
+           nativeRange.setEnd( div.lastChild.firstChild, 1  );
+           var nativeFrag = nativeRange.extractContents();
+           var nativeObj = trans(nativeRange);
+
+           div.innerHTML = '<b id="a">xxxx</b>xxxx<b id="b">c22c</b>';
+
+           range.setStart(div.firstChild.firstChild, 1 ).setEnd( div.lastChild.firstChild, 1);
+
+           equals( getHTML( range.extractContents() ), getHTML(nativeFrag) );
+           same(trans(range),nativeObj);
+
+
+
+        }
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+        var r = range;
+
+        r.setStart(document.getElementById('first').firstChild, 1);
+        r.setEnd(document.getElementById('first').firstChild, 4);
+
+        equals(getHTML(r.extractContents()), 'irs')
+        equals(r.startContainer.nodeType, 3)
+        equals(r.startOffset, 1)
+        equals(r.endContainer.nodeType, 3)
+        equals(r.endOffset, 1)
+        equals(r.collapsed, true)
+
+        equals(getHTML(document.getElementById('first')), '<p id="first">ft<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p>')
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+
+        r.setStart(document.getElementById('two').firstChild, 1);
+		r.setEnd(document.getElementById('last').firstChild, 2);
+
+		equals(getHTML(r.extractContents()), '<table id="table" width="300"><tbody><tr><td id="two">bc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">te</p>')
+		equals(r.startContainer.nodeType, 1)
+		equals(getHTML(r.startContainer), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">a</td></tr></tbody></table><p id="last">xtabc<span>span</span></p></div>')
+		equals(r.startOffset, 4)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 4)
+		equals(getHTML(r.endContainer), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">a</td></tr></tbody></table><p id="last">xtabc<span>span</span></p></div>')
+		equals(r.collapsed, true)
+
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+
+        r.setStart(document.getElementById('test'), 0);
+		r.setEnd(document.getElementById('traverse'), 2);
+
+		equals(getHTML(r.extractContents()), '<p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em></p>')
+		equals(getHTML(r.startContainer), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.startOffset, 0)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 0)
+		equals(getHTML(r.endContainer), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(getHTML(document.getElementById('test')), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.collapsed, true)
+    } )
+
+    test( 'deleteContents', function() {
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+        var r = range;
+
+         r.setStart(document.getElementById('two').firstChild, 1);
+		r.setEnd(document.getElementById('last').firstChild, 2);
+		r.deleteContents();
+
+		equals(getHTML(r.startContainer), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">a</td></tr></tbody></table><p id="last">xtabc<span>span</span></p></div>')
+		equals(r.startOffset, 4)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 4)
+		equals(getHTML(r.endContainer), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">a</td></tr></tbody></table><p id="last">xtabc<span>span</span></p></div>')
+		equals(getHTML(document.getElementById('test')), '<div id="test"><p id="first">first<!--not--> strong <!-- --><strong id="strong">strong</strong> second <em id="em">em</em> strong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">a</td></tr></tbody></table><p id="last">xtabc<span>span</span></p></div>')
+		equals(r.collapsed, true) ;
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+
+        r.setStart(document.getElementById('first').firstChild, 1);
+		r.setEnd(document.getElementById('first').lastChild, 4);
+		r.deleteContents();
+
+		equals(getHTML(r.startContainer), '<p id="first">fong.</p>')
+		equals(r.startOffset, 1)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 1)
+		equals(getHTML(r.endContainer), '<p id="first">fong.</p>')
+		equals(getHTML(document.getElementById('test')), '<div id="test"><p id="first">fong.</p><p id="second">bar</p><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.collapsed, true)
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+
+        	r.setStart(document.getElementById('test'), 0);
+		r.setEnd(document.getElementById('test'), 2);
+		r.deleteContents();
+
+		equals(getHTML(r.startContainer), '<div id="test"><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.startOffset, 0)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 0)
+		equals(getHTML(r.endContainer), '<div id="test"><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(getHTML(document.getElementById('test')), '<div id="test"><p id="traverse"><b><em id="em">some text</em></b><em>em text</em>more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.collapsed, true)
+
+        div.innerHTML = '<p id=\"first\">first<!--not--> strong <!-- --><strong id=\"strong\">strong</strong> second <em id=\"em\">em</em> strong.</p><p id=\"second\">bar</p><p id=\"traverse\"><b><em id=\"em\">some text</em></b><em>em text</em>more text</p><table id=\"table\" width=\"300\"><tbody><tr><td>1</td><td id=\"two\">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id=\"last\">textabc<span>span</span></p>'
+
+        r.setStart(document.getElementById('test'), 0);
+		r.setEnd(document.getElementById('traverse'), 2);
+		r.deleteContents();
+
+		equals(getHTML(r.startContainer), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.startOffset, 0)
+		equals(r.endContainer.nodeType, 1)
+		equals(r.endOffset, 0)
+		equals(getHTML(r.endContainer), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(getHTML(document.getElementById('test')), '<div id="test"><p id="traverse">more text</p><table id="table" width="300"><tbody><tr><td>1</td><td id="two">abc</td></tr><tr><td>3</td><td>4</td></tr></tbody></table><p id="last">textabc<span>span</span></p></div>')
+		equals(r.collapsed, true)
+    })
+</script>

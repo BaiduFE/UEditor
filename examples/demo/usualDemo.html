@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript">
+        var paths = [
+            'editor.js',
+            'core/browser.js',
+            'core/utils.js',
+            'core/EventBase.js',
+            'core/dom/dom.js',
+            'core/dom/dtd.js',
+            'core/dom/domUtils.js',
+            'core/dom/Range.js',
+            'core/dom/Selection.js',
+            'core/Editor.js',
+
+            'commands/basestyle.js',
+            'commands/font.js',
+            'commands/inserthtml.js',
+            'commands/removeformat.js'
+        ];
+        (function(){
+            var i = -1,baseURL = '../../src/',//基础路径
+                absolute;
+            while(i++ < paths.length-1){
+                absolute = baseURL + paths[i];
+                document.write("<script type='text/javascript' charset='utf-8' src='"+absolute+"'><\/script>");
+            }
+        })()
+    </script>
+    <style type="text/css">
+        #editor {
+            border: 1px solid #CCC;
+        }
+        #editor_toolbar_box {
+            background: #F0F0EE;
+            padding: 2px;
+        }
+        #editor_iframe_holder {
+            border-top: 1px solid #CCC;
+            border-bottom: 1px solid #CCC;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor">
+        <div id="editor_toolbar_box">
+            <div id="editor_toolbar">
+                <input id="bold" type="button" value="加粗" onclick="myeditor.execCommand('bold')"/>
+                <input id="italic" type="button" value="加斜" onclick="myeditor.execCommand('italic')"/>
+                <input id="underline" type="button" value="下划线" onclick="myeditor.execCommand('underline')"/>
+                <input id="strikethrough" type="button" value="删除线" onclick="myeditor.execCommand('strikethrough')"/>
+                <select id="fontfamily" onchange="myeditor.execCommand('fontfamily',this.value)">
+                    <option value="宋体,simsun">宋体</option>
+                    <option value="楷体,楷体_gb2312,simkai">楷体</option>
+                    <option value="隶书,simli">隶书</option>
+                    <option value="黑体,simhei">黑体</option>
+                    <option value="andale mono,times">andale mono</option>
+                    <option value="arial,helvetica,sans-serif">arial</option>
+                    <option value="arial black,avant garde">arial black</option>
+                    <option value="comic sans ms,sans-serif">comic sans ms</option>
+                </select>
+                <select id="fontsize" onchange="myeditor.execCommand('fontsize',this.value)">
+                    <option value="10pt">10pt</option>
+                    <option value="11pt">11pt</option>
+                    <option value="12pt">12pt</option>
+                    <option value="14pt">14pt</option>
+                    <option value="16pt">16pt</option>
+                    <option value="18pt">18pt</option>
+                    <option value="20pt">20pt</option>
+                    <option value="22pt">22pt</option>
+                    <option value="24pt">24pt</option>
+                    <option value="36pt">36pt</option>
+                </select>
+                <input id="fontColor" type="button" value="字体颜色" onclick="setFontColor()"/>
+                <input type="button" value="插入html" onclick="insert()"/>
+                <input type="button" value="清除格式" onclick="myeditor.execCommand('removeformat')"/>
+                <input type="button" value="获得编辑器内容" onclick="alert(myeditor.getContent())"/>
+            </div>
+        </div>
+        <div id="editor_iframe_holder"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        //editor的属性
+        var option = {
+            initialContent: 'hello world'//初始化编辑器的内容
+            //initialStyle: ''             //编辑器初始化样式
+            //iframeCssUrl: ''            //给iframe样式的路径
+            //enterTag : 'p'              //输入回车时使用p标签
+        };
+        //实例化编辑器
+        var myeditor = new baidu.editor.Editor(option);
+        
+        //给编辑器增加一个选中改变的事件，用来判断所选内容以及状态
+        myeditor.addListener('selectionchange', function (){
+            var cmdName = ['bold','italic','underline','strikethrough'],
+                fontName = ['fontfamily','fontsize'],i=-1,
+                range = myeditor.selection.getRange();//得到选中区域
+            //判断是否为封闭标签
+            if(range.collapsed){
+                document.getElementById("bold").disabled = true;
+                document.getElementById("italic").disabled = true;
+                document.getElementById("underline").disabled = true;
+                document.getElementById("strikethrough").disabled = true;
+                document.getElementById("fontfamily").disabled = true;
+                document.getElementById("fontsize").disabled = true;
+                document.getElementById("fontColor").disabled = true;
+            }else{
+                document.getElementById("bold").disabled = false;
+                document.getElementById("italic").disabled = false;
+                document.getElementById("underline").disabled = false;
+                document.getElementById("strikethrough").disabled = false;
+                document.getElementById("fontfamily").disabled = false;
+                document.getElementById("fontsize").disabled = false;
+                document.getElementById("fontColor").disabled = false;
+            }
+            while(i++ < cmdName.length-1){
+                var state = myeditor.queryCommandState(cmdName[i]);
+                if(state == 1){
+                    document.getElementById(cmdName[i]).style.color = "red";
+                }else{
+                    document.getElementById(cmdName[i]).style.color = "";
+                }
+            }
+            i = -1;
+            while(i++<fontName.length-1){
+                var fstate = myeditor.queryCommandValue(fontName[i]).toLowerCase();
+                var fselect = document.getElementById(fontName[i]);
+                for(var j= 0;j<fselect.options.length;j++){
+                    if(fselect.options[j].value.toLowerCase().indexOf(fstate.split(",")[0])!=-1){
+                        fselect.options[j].selected = "true";
+                    }
+                }
+            }
+            var fcolor = myeditor.queryCommandValue("forecolor");
+            document.getElementById("fontColor").style.color = fcolor;
+        });
+        myeditor.addListener("ready", function(){
+            if(myeditor.selection.getRange().collapsed){
+                document.getElementById("bold").disabled = true;
+                document.getElementById("italic").disabled = true;
+                document.getElementById("underline").disabled = true;
+                document.getElementById("strikethrough").disabled = true;
+                document.getElementById("fontfamily").disabled = true;
+                document.getElementById("fontsize").disabled = true;
+                document.getElementById("fontColor").disabled = true;
+            }else{
+                document.getElementById("bold").disabled = false;
+                document.getElementById("italic").disabled = false;
+                document.getElementById("underline").disabled = false;
+                document.getElementById("strikethrough").disabled = false;
+                document.getElementById("fontfamily").disabled = false;
+                document.getElementById("fontsize").disabled = false;
+                document.getElementById("fontColor").disabled = false;
+            }
+        });
+        //渲染编辑器
+        myeditor.render('editor_iframe_holder');
+        //给字体设置颜色
+        function setFontColor(){
+            var ipt = document.getElementById("fontColor");
+            var fontColor = prompt("请输入字体颜色",ipt.style.color ? ipt.style.color : "#000000");
+            ipt.style.color = fontColor;
+            myeditor.execCommand('forecolor',fontColor);
+        }
+        //插入文本
+        function insert(){
+            var insertTxt = "插入的文本";
+            insertTxt = prompt("插入的内容",insertTxt);
+            myeditor.execCommand("inserthtml",insertTxt);
+        }
+        
+    </script>
+</body>
+</html>

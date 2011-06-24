@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+    <title>justify</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+
+    <script src="../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../src/core/EventBase.js" type="text/javascript"></script>
+
+    <script src="../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Selection.js" type="text/javascript"></script>
+    <script src="../../../src/core/Editor.js" type="text/javascript"></script>
+    <script src="../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+    <script src="../../../src/commands/justify.js" type="text/javascript"></script>
+</head>
+
+<body>
+<h1 id="qunit-header">justify</h1>
+
+<h2 id="qunit-banner"></h2>
+
+
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test" style="width:500px;height:500px;border:1px solid #ccc"></div>
+
+
+</body>
+</html>
+<script>
+    var editor = new baidu.editor.Editor();
+    editor.render( 'test' );
+    var domUtils = baidu.editor.dom.domUtils,
+            dtd = baidu.editor.dom.dtd,
+            range = new baidu.editor.dom.Range( document );
+    module( "justify" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    function trans( range ) {
+        return {
+            startContainer : range.startContainer,
+            startOffset : range.startOffset,
+            endContainer : range.endContainer,
+            endOffset : range.endOffset
+        }
+    }
+
+    function manualDeleteFillData() {
+        var fillData = baidu.editor.Editor.fillData;
+        fillData  && domUtils.remove( fillData );
+        baidu.editor.Editor.fillData = null;
+    }
+    function genDom( html ) {
+        var div = document.createElement( 'div' );
+        div.innerHTML = html;
+        return div;
+    }
+    test( 'justify', function() {
+        editor.focus();
+        editor.setContent( '<b><i>xxxx</i></b>' );
+        var d = editor.document;
+        var range = new baidu.editor.dom.Range( editor.document );
+        range.setStart( editor.document.getElementsByTagName( 'i' )[0].firstChild, 2 ).collapse( true ).select();
+
+        editor.execCommand( 'justify','left');
+        manualDeleteFillData();
+       equals(d.getElementsByTagName('p')[0].style.textAlign,'left');
+
+         editor.setContent( '<table><tr><td>xxx</td><td>xxx</td></tr></table>' );
+          range.setStart( editor.document.body,0 ).setEnd(d.getElementsByTagName('td')[0],1).select();
+        editor.execCommand('justify','center');
+
+        equals(d.getElementsByTagName('td')[0].style.textAlign,'center');
+
+       range.selectNode( d.body.firstChild).select();
+       editor.execCommand('justify','left');
+        equals(d.getElementsByTagName('td')[1].style.textAlign,'left');
+
+          editor.setContent( '<b><i>xxxx</i></b><table><tr><td>xxx</td><td>xxx</td></tr></table>' );
+          range.setStart( d.getElementsByTagName('i')[0],0 ).setEnd(d.getElementsByTagName('td')[0],1).select();
+          editor.execCommand('justify','left');
+          equals(getHTML(d.body),getHTML(genDom('<p style="text-align: left; "><b><i>xxxx</i></b></p><table><tr><td style="text-align: left; ">xxx</td><td>xxx</td></tr></table>')))
+
+        range.setStart( d.getElementsByTagName('i')[0],0 ).setEnd(d.getElementsByTagName('td')[0],1).select();
+        editor.execCommand('justify','center');
+        equals(getHTML(d.body),getHTML(genDom('<p style="text-align: center; "><b><i>xxxx</i></b></p><table><tr><td style="text-align: center; ">xxx</td><td>xxx</td></tr></table>')))
+
+         editor.setContent( '<table><tr><td>xxx</td><td>xxx</td></tr></table><b><i>xxxx</i></b>' );
+         range.setEnd( d.getElementsByTagName('i')[0],1 ).setStart(d.getElementsByTagName('td')[0],0).select();
+         editor.execCommand('justify','left');
+        equals(getHTML(d.body),getHTML(genDom('<table><tr><td style="text-align: left; ">xxx</td><td style="text-align: left; ">xxx</td></tr></table><p style="text-align: left; "><b><i>xxxx</i></b></p>')))
+         editor.setContent( '<table><tr><td>xxx</td><td>xxx</td></tr></table><b><i>xxxx</i></b>' );
+        range.setEnd( d.getElementsByTagName('i')[0],0 ).setStart(d.getElementsByTagName('td')[0],1).select();
+        editor.execCommand('justify','center');
+           equals(getHTML(d.body),getHTML(genDom('<table><tr><td>xxx</td><td style="text-align: center; ">xxx</td></tr></table><p style="text-align: center; "><b><i>xxxx</i></b></p>')))
+
+        range.setEnd( d.getElementsByTagName('i')[0],1 ).setStart(d.getElementsByTagName('td')[1],0).select();
+        equals(editor.queryCommandValue('justify'),'center');
+        editor.setContent( '<table><tr><td>xxx</td><td>xxx</td></tr></table><b><i>xxxx</i></b>' );
+        range.setStart( d.getElementsByTagName('i')[0],0 ).setEnd(d.getElementsByTagName('td')[0],1).select();
+        equals(editor.queryCommandValue('justify'),'left');
+    } )
+</script>

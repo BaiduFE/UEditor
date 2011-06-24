@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+<head>
+    <title>Range.appleInlineStyle</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+
+    <script src="../../../../src/editor.js" type="text/javascript"></script>
+    <script src="../../../../src/core/utils.js" type="text/javascript"></script>
+    <script src="../../../../src/core/browser.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+    <script src="../../../../src/core/dom/Range.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+<h1 id="qunit-header">Range.appleInlineStyle Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test">
+</div>
+
+
+</body>
+</html>
+<script>
+var domUtils = baidu.editor.dom.domUtils,
+        dtd = baidu.editor.dom.dtd;
+range = new baidu.editor.dom.Range( document );
+module( "Range" );
+
+
+function genDom( html ) {
+    var div = document.createElement( 'div' );
+    div.innerHTML = html;
+    return div.firstChild;
+}
+
+function getHTML( co ) {
+    var div = document.createElement( 'div' ), h;
+
+    if ( !co )
+        return 'null';
+
+    div.appendChild( co.cloneNode( true ) );
+    h = div.innerHTML.toLowerCase();
+    g
+    h = h.replace( /[\r\n\t]/, '' ); // Remove line feeds and tabs
+    h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+    return h;
+}
+;
+function get( co ) {
+
+    var h = co.innerHTML.toLowerCase();
+
+    h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+    h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+    return h;
+}
+function trans( range ) {
+    return {
+        startContainer : range.startContainer,
+        startOffset : range.startOffset,
+        endContainer : range.endContainer,
+        endOffset : range.endOffset
+    }
+}
+var div = document.getElementById( 'test' ),
+
+        range = new baidu.editor.dom.Range( document );
+
+
+test( 'applyInlineStyle', function() {
+
+    div.innerHTML = 'xxxx';
+    range.setStartBefore( div.firstChild );
+    range.setEndAfter( div.firstChild );
+
+    range.applyInlineStyle( 'strong' );
+    equals( get( div ), '<strong>xxxx</strong>' );
+
+    div.innerHTML = 'xxxx<strong>bbbb</strong>';
+    range.setStart( div.firstChild, 3 );
+    range.setEnd( div.lastChild.firstChild, 3 );
+
+    range.applyInlineStyle( 'strong' );
+    equals( get( div ), 'xxx<strong>xbbbb</strong>' );
+
+    div.innerHTML = 'xx<p>xx<strong>bbbb</strong>xxx</p>xx<p><strong>aaaaaaa</strong></p>';
+    range.setStartBefore( div.firstChild.nextSibling.firstChild );
+    range.setEndAfter( div.lastChild.firstChild.firstChild );
+
+    range.applyInlineStyle( 'strong' );
+    equals( get( div ), 'xx<p><strong>xxbbbbxxx</strong></p><strong>xx</strong><p><strong>aaaaaaa</strong></p>' );
+
+    div.innerHTML = 'xxxx';
+    range.setStartBefore( div.firstChild );
+    range.setEndAfter( div.firstChild );
+
+    range.applyInlineStyle( 'span', {style:'font-size:12px'} );
+    equals( div.firstChild.innerHTML, 'xxxx' );
+    div.innerHTML = '<ul><li>xxxxx</li><li>bbbb</li></ul>';
+    range.setStart( div.firstChild.firstChild, 0 );
+    range.setEnd( div, 1 );
+    range.applyInlineStyle( 'b' );
+    equals( get( div ), '<ul><li><b>xxxxx</b></li><li><b>bbbb</b></li></ul>' );
+
+
+    div.innerHTML = '<span style="font-size:12px">xxxx</span>';
+    range.setStart( div.firstChild.firstChild, 0 ).setEnd( div.lastChild.firstChild, 4 );
+    range.applyInlineStyle( 'span', {style:'color:red'} );
+
+    ok( domUtils.isSameElement( div.firstChild, genDom( '<span style="font-size:12px;color:red;">xxxx</span>' ) ) );
+
+    div.innerHTML = '<span style="font-size:12px">xxxx</span>';
+    range.setStart( div.firstChild.firstChild, 1 ).setEnd( div.lastChild.firstChild, 3 );
+    range.applyInlineStyle( 'span', {style:'font-size:12px'} );
+
+    ok( domUtils.isSameElement( div.firstChild, genDom( '<span style="font-size:12px;">xxxx</span>' ) ) );
+
+    div.innerHTML = '<span style="font-size:12px">xxxx</span>';
+    range.setStart( div.firstChild.firstChild, 1 ).setEnd( div.lastChild.firstChild, 3 );
+    range.applyInlineStyle( 'span', {style:'color:red'} );
+    ok( domUtils.isSameElement( div.firstChild, genDom( '<span style="font-size:12px;">x<span style="color:red">xx</span>x</span>' ) ) );
+
+    var rng = range;
+    div.innerHTML = '<p>1234</p>';
+
+    rng.setStart( div.firstChild.firstChild, 0 );
+    rng.setEnd( div.firstChild.firstChild, 4 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b>1234</b></p>', 'Inline element on selected text' );
+
+    div.innerHTML = '<p>1234</p>';
+
+    rng.setStart( div.firstChild.firstChild, 1 );
+    rng.setEnd( div.firstChild.firstChild, 3 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p>1<b>23</b>4</p>', 'Inline element on partially selected text' );
+
+
+    div.innerHTML = '<p>1234</p><p>1234</p>';
+
+    rng.setStart( div.firstChild.firstChild, 1 );
+    rng.setEnd( div.lastChild.firstChild, 3 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p>1<b>234</b></p><p><b>123</b>4</p>', 'Inline element on partially selected text in start/end elements' );
+
+
+    div.innerHTML = '<p>1234</p>';
+
+    rng.setStart( div, 0 );
+    rng.setEnd( div, 1 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b>1234</b></p>', 'Inline element on selected element' );
+
+
+    div.innerHTML = '<p>1234</p><p>1234</p>';
+
+    rng.setStart( div, 0 );
+    rng.setEnd( div, 2 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b>1234</b></p><p><b>1234</b></p>', 'Inline element on multiple selected elements' );
+
+
+    div.innerHTML = '<p><em>1234</em>5678<span>9</span></p><p><em>1234</em>5678<span>9</span></p>';
+
+    rng.setStart( div, 0 );
+    rng.setEnd( div, 2 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b><em>1234</em>5678<span>9</span></b></p><p><b><em>1234</em>5678<span>9</span></b></p>', 'Inline element on multiple selected elements with various childnodes' );
+
+
+    div.innerHTML = '<p>1234</p>';
+
+    rng.setStart( div.firstChild, 0 );
+    rng.setEnd( div.firstChild, 4 );
+    rng.applyInlineStyle( 'b', {title : 'value1', id : 'value2'} );
+     ok( domUtils.isSameElement( div.firstChild, genDom( '<p><b id="value2" title="value1">1234</b></p>' ) ) );
+
+
+
+//        // Inline element with wrapable parents
+//        editor.formatter.register('format', {inline : 'b'});
+    div.innerHTML = '<p>x<em><span>1234</span></em>y</p>';
+
+    rng.setStart( div.getElementsByTagName( 'span' )[0].firstChild, 0 );
+    rng.setEnd( div.getElementsByTagName( 'span' )[0].firstChild, 4 );
+
+    rng.applyInlineStyle( 'b' );
+
+    equals( get( div ), '<p>x<b><em><span>1234</span></em></b>y</p>', 'Inline element with wrapable parents' );
+
+
+
+//        // Inline element with redundant child
+
+    div.innerHTML = '<p><b>1234</b></p>';
+
+    rng.setStart( div.getElementsByTagName( 'p' )[0], 0 );
+    rng.setEnd( div.getElementsByTagName( 'p' )[0], 1 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b>1234</b></p>', 'Inline element with redundant child' );
+
+
+    div.innerHTML = '<p><b>a<em>1234</em>b</b></p>';
+
+    rng.setStart( div.getElementsByTagName( 'em' )[0].firstChild, 0 );
+    rng.setEnd( div.getElementsByTagName( 'em' )[0].firstChild, 4 );
+
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p><b>a<em>1234</em>b</b></p>', 'Inline element with redundant parent' );
+
+
+    // Inline element merged with parent and child
+
+    div.innerHTML = '<p>a<b>12<b>34</b>56</b>b</p>';
+
+    rng.setStart( div.getElementsByTagName( 'b' )[0].firstChild, 1 );
+    rng.setEnd( div.getElementsByTagName( 'b' )[0].lastChild, 1 );
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<p>a<b>123456</b>b</p>', 'Inline element merged with parent and child' );
+
+    div.innerHTML = '<table><tr><td><br/></td></tr><tr><td><br/></td></tr><tr><td><br/></td></tr></table>';
+    rng.setStart( div, 0 );
+    rng.setEnd( div, 1 );
+
+    rng.applyInlineStyle( 'b' );
+    equals( get( div ), '<table><tbody><tr><td><br></td></tr><tr><td><br></td></tr><tr><td><br></td></tr></tbody></table>' );
+
+    div.innerHTML = '';
+    div.appendChild( document.createTextNode( '\ufeff' ) );
+    div.appendChild( document.createTextNode( '\ufeff' ) );
+    rng.setStart( div, 0 );
+    rng.setEnd( div, 1 );
+
+    rng.applyInlineStyle( 'b' );
+
+    equals( div.getElementsByTagName( 'b' ).length, 0 )
+
+    div.innerHTML = 'xxxx';
+    rng.setStart(div,0).setEnd(div,1)
+
+    rng.applyInlineStyle('u').applyInlineStyle('span',{style:'color:red'}).applyInlineStyle('span',{style:'font-size:12px'})
+    ok( domUtils.isSameElement( div.firstChild, genDom( '<span style="color:red;font-size:12px"><u>xxxx</u></span>' ) ) );
+
+} );
+
+</script>

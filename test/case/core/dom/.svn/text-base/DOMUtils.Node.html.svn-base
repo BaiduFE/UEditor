@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+    <title>domUtils.Node</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--qunit js -->
+    <script src="../../../qunit/qunit.js" type="text/javascript"></script>
+    <link media="screen" href="../../../qunit/qunit.css" type="text/css" rel="stylesheet"/>
+    <!--qunit js -->
+</head>
+
+<body>
+<h1 id="qunit-header">domUtils.Node Test</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="test">
+</div>
+<iframe id="ifr" src="javascript:''"></iframe>
+
+<script src="../../../../src/editor.js" type="text/javascript"></script>
+<script src="../../../../src/core/utils.js" type="text/javascript"></script>
+<script src="../../../../src/core/browser.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dom.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/dtd.js" type="text/javascript"></script>
+<script src="../../../../src/core/dom/domUtils.js" type="text/javascript"></script>
+
+
+</body>
+</html>
+<script>
+    module( "domUtils.Node" );
+    function getHTML( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h;
+    }
+    var domUtils = baidu.editor.dom.domUtils,
+            div = document.getElementById( 'test' );
+
+    test("remove", function (){
+        div.innerHTML = '<div><div><div></div></div><div></div></div>';
+        var firstChild = div.firstChild;
+        domUtils.remove(firstChild);
+        ok(div.firstChild !== firstChild);
+    });
+
+    test( "getPostion", function() {
+        div.innerHTML = "<div>aa</div><div>bbb</div>";
+        var nodeA = div.firstChild.firstChild;
+        var nodeB = div.lastChild.firstChild;
+        equals( domUtils.getPosition( nodeA, nodeB ), domUtils.POSITION_PRECEDING );
+        equals( domUtils.getPosition( nodeA, div ), domUtils.POSITION_IS_CONTAINED + domUtils.POSITION_FOLLOWING );
+        equals( domUtils.getPosition( nodeA, nodeA ), domUtils.POSITION_IDENTICAL );
+        ok( domUtils.getPosition( nodeA, div.firstChild ) & (domUtils.POSITION_IS_CONTAINED | domUtils.POSITION_FOLLOWING) );
+        equals( domUtils.getPosition( nodeA, div.firstChild ), domUtils.POSITION_IS_CONTAINED + domUtils.POSITION_FOLLOWING );
+        equals( domUtils.getPosition( div.firstChild, nodeA ), domUtils.POSITION_CONTAINS + domUtils.POSITION_PRECEDING );
+        equals( domUtils.getPosition( div.firstChild, nodeB ), domUtils.POSITION_PRECEDING );
+
+        equals( domUtils.getPosition( div.ownerDocument.documentElement, div ), domUtils.POSITION_CONTAINS + domUtils.POSITION_PRECEDING );
+        equals( domUtils.getPosition( div.ownerDocument, div.ownerDocument.documentElement ), domUtils.POSITION_CONTAINS + domUtils.POSITION_PRECEDING );
+
+        nodeA.parentNode.removeChild( nodeA );
+
+        ok( domUtils.getPosition( nodeA, nodeB ) & domUtils.POSITION_DISCONNECTED );
+
+        ok( domUtils.getPosition( nodeA, div ) & domUtils.POSITION_DISCONNECTED );
+
+        nodeB.parentNode.removeChild( nodeB );
+
+        var s =  domUtils.getPosition( nodeA, nodeB );
+        //chrome下这个原生的compareDocumentPosition会返回4
+        ok( domUtils.getPosition( nodeA, nodeB ) & domUtils.POSITION_DISCONNECTED );
+
+        div.innerHTML = "<div><div>aa</div><div>bbb</div></div>";
+        nodeA = div.firstChild.firstChild.firstChild;
+        nodeB = div.firstChild.lastChild.firstChild;
+        div.removeChild( div.firstChild );
+        equals( domUtils.getPosition( nodeA, nodeB ), domUtils.POSITION_PRECEDING );
+
+        var doc = document.getElementById( 'ifr' ).contentWindow.document;
+        ok( domUtils.getPosition( nodeA, doc.documentElement ) & domUtils.POSITION_DISCONNECTED );
+
+    } );
+
+    test( "findParent & findParents", function () {
+        div.innerHTML = "<div><p><a><span>123</span></a></p></div>";
+        var DIV = div.firstChild;
+        var P = DIV.firstChild;
+        var A = P.firstChild;
+        var SPAN = A.firstChild;
+
+        var nodeA = div.firstChild.firstChild.firstChild.firstChild.firstChild;
+        equals( domUtils.findParent( nodeA ), nodeA.parentNode );
+        equals( domUtils.findParent( nodeA, function ( node ) {
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'p';
+        } ), P );
+        equals( domUtils.findParent( nodeA, function ( node ) {
+            return node.nodeType == 1 && node.tagName.toLowerCase() == 'head';
+        } ), null );
+
+        same( domUtils.findParents( nodeA, false, function ( node ) {
+            return node.nodeType == 1 && (node.tagName.toLowerCase() == 'p' || node.tagName.toLowerCase() == 'span');
+        } ), [P, SPAN] );
+        same( domUtils.findParents( nodeA, true, function ( node ) {
+            return node.nodeType == 1 && (node.tagName.toLowerCase() == 'p' || node.tagName.toLowerCase() == 'span');
+        }, true ), [nodeA,SPAN, P] );
+        same( domUtils.findParents( nodeA, false, function ( node ) {
+            return node.nodeType == 1 && (node.tagName.toLowerCase() == 'head');
+        }, true ), [] );
+    } );
+
+    test( "getNextNode", function () {
+        div.innerHTML = '<b><i>bbb</i></b><span></span>';
+        equals( domUtils.getNextDomNode( div.firstChild.firstChild ), div.lastChild );
+
+        equals( domUtils.getNextDomNode( div.firstChild.firstChild, true ), div.firstChild.firstChild.firstChild );
+
+        equals( domUtils.getNextDomNode( div.firstChild.firstChild, true, function( node ) {
+            return node.nodeType == 1;
+        } ), div.lastChild );
+    } );
+
+    test( "getCommonAncestor", function () {
+        div.innerHTML = '<b><i>bbb</i></b><span></span>';
+        equals( domUtils.getCommonAncestor( div.firstChild.firstChild, div.lastChild ), div );
+
+        equals( domUtils.getCommonAncestor( div.firstChild.firstChild, div.firstChild ), div.firstChild );
+
+        var s = div.lastChild;
+        div.removeChild( div.lastChild );
+        equals( domUtils.getCommonAncestor( div.firstChild.firstChild, s ), null );
+    } );
+    test( "clearEmptySibling", function () {
+        div.innerHTML = '<b><i>bbb</i></b><span></span>';
+        domUtils.clearEmptySibling( div.firstChild )
+        equals( getHTML( div ), '<b><i>bbb</i></b>' );
+        div.innerHTML = '<b></b><i></i>xxxx<b></b><i></i>';
+        domUtils.clearEmptySibling( div.childNodes[2] ) ;
+        equals( getHTML( div ), 'xxxx' );
+        div.innerHTML = '<b></b>xxxx<b></b>eeee<i></i><b></b>';
+        domUtils.clearEmptySibling( div.childNodes[3] ) ;
+         equals( getHTML( div ), '<b></b>xxxxeeee' );
+    } );
+
+</script>

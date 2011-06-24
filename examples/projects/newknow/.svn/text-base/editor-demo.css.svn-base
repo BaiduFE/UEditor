@@ -1,0 +1,170 @@
+/*
+ * Author : caopuwei
+ * Date   : 2011-03-28
+ * component : editor
+ * */
+
+ul,li{
+	list-style:none;
+}
+
+.editor-body{
+	border:2px solid #4a8983;
+    width:100%;
+}
+
+.editor-toolBar{
+	height:30px;
+	background-color:#f2faf9;
+	border-bottom:1px solid #c3e6e3;
+	line-height:30px;
+}
+
+.editor-textarea{
+	width:634px;
+	padding:5px;
+	vertical-align:top;
+	text-align:left;
+	height:80px;
+	border:0px none;
+}
+
+.editor-btn-ct{
+	padding-left:5px;
+	height:26px;
+	padding-top:2px;
+	background:#F2FAF9 url('images/editor.gif') 0 115px repeat-x;
+	border:1px solid #ffffff;
+	border-left:none;
+	border-right:none;
+}
+
+.editor-btn-ct span{
+	display:block;
+	width:23px;
+	height:23px;
+	float:left;
+	margin-right:5px;
+	font-weight:bold;
+	font-size:14px;
+	cursor:pointer;
+}
+
+.bold-default {
+	background:transparent url('images/editor.gif') 0 0 no-repeat;
+}
+.italic-default {
+	background:transparent url('images/editor.gif') -27px 0 no-repeat;
+}
+.underline-default {
+	background:transparent url('images/editor.gif') -55px 0 no-repeat;
+}
+.unorderlist-default {
+	background:transparent url('images/editor.gif') -83px 0 no-repeat;
+}
+.orderlist-default {
+	background:transparent url('images/editor.gif') -111px 1px no-repeat;
+}
+.quote-default {
+	background:transparent url('images/editor.gif') -139px 0 no-repeat;
+}
+.clear-default {
+	background:transparent url('images/editor.gif') -167px 1px no-repeat;
+}
+
+.bold-hover {
+	background:transparent url('images/editor.gif') 0 -38px no-repeat;
+}
+.italic-hover {
+	background:transparent url('images/editor.gif') -27px -38px no-repeat;
+}
+.underline-hover {
+	background:transparent url('images/editor.gif') -55px -38px no-repeat;
+}
+.unorderlist-hover {
+	background:transparent url('images/editor.gif') -83px -38px no-repeat;
+}
+.orderlist-hover {
+	background:transparent url('images/editor.gif') -111px -38px no-repeat;
+}
+.quote-hover {
+	background:transparent url('images/editor.gif') -139px -38px no-repeat;
+}
+.clear-hover {
+	background:transparent url('images/editor.gif') -167px -38px no-repeat;
+}
+
+.bold-active {
+	background:transparent url('images/editor.gif') 0 -77px no-repeat;
+}
+.italic-active {
+	background:transparent url('images/editor.gif') -27px -77px no-repeat;
+}
+.underline-active {
+	background:transparent url('images/editor.gif') -55px -77px no-repeat;
+}
+.unorderlist-active {
+	background:transparent url('images/editor.gif') -83px -77px no-repeat;
+}
+.orderlist-active {
+	background:transparent url('images/editor.gif') -111px -77px no-repeat;
+}
+.quote-active {
+	background:transparent url('images/editor.gif') -139px -77px no-repeat;
+}
+.clear-active {
+	background:transparent url('images/editor.gif') -167px -77px no-repeat;
+}
+.editor-footer{
+	margin-top:5px;
+}
+
+.editor-footer ul{
+	margin-left:10px;
+	float:left;
+}
+
+.editor-status{
+	float:left;
+}
+
+.editor-btn-publish{
+	width:55px;
+	height:25px;
+	color:#FFFFFF;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+.editor-button{
+	float:right;
+}
+
+.editor-footer li{
+	font-size:12px;	
+	float:left;
+	margin-right:5px;
+	height:30px;
+	line-height:30px;
+	vertical-align:middle;
+}
+
+.editor-time{
+}
+
+.editor-save-status{
+	font-weight:bold;
+}
+
+.editor-clear{
+	cursor:pointer;
+}
+
+.editor-save{
+	cursor:pointer;
+}
+
+.editor-btn-publish{
+	background-color:#b75807;
+	border:1px solid #800027;
+}

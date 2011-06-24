@@ -1,0 +1,72 @@
+body{color:#939393;font-size:14px;font-family:Arial;margin:0px;padding:0px;}
+img{border:0px;}
+.clear{font-size:1px;line-height:1px;height:0px;clear:both}
+p.l22{margin:0;padding:5px 0px;line-height:22px;}
+.C75{color:#757474}
+.C5C{color:#5c5c5c}
+.C54{color:#545454}
+p.p15{margin:0;padding-left:15px;line-height:22px;}
+h3.f18{margin:0;padding:5px 0px;font-size:18px;color:#5591da}
+h3.m30{margin:30px 0 10px 0;padding:0 0 0 25px;line-height:30px;font-size:18px;height:30px;color:#5591da;background:url('../img/icons.gif') 0px -160px no-repeat}
+h3.c00{margin:25px 0px 0px 25px;padding:5px 0px;font-size:18px;color:#000;}
+a.down{margin:0px 5px;padding-left:20px;background:url('../img/icons.gif') 0px -200px no-repeat;}
+a.link{color:#4577e9;text-decoration:underline;}
+
+/*public layout*/
+
+.footer{
+	height:60px;margin-top:22px;position:relative;
+	line-height:30px;color:#cbcbcb;
+	border-top:1px solid #efefef;font-size:12px;
+}
+.footer a{color:#cbcbcb;text-decoration:none;}
+.footer-copyright{
+	position:absolute;right:0px;top:0px;color:#4d4d4d;
+}
+
+.head{
+	height:103px;position:relative;
+}
+.head-nav{
+	width:620px;height:29px;position:absolute;right:0px;top:46px;overflow:hidden;
+}
+
+a.head-nav-item{
+	font-family:Calibri;
+	display:block;float:left;position:relative;overflow:hidden;
+	padding:0px 10px;margin:0px 8px;text-decoration:none;
+	height:29px;line-height:29px;color:#626262;
+	/* 火狐字体不兼容导致过宽，所以修改字体大小 16-12 */ font-size:16px;
+	background:#FFF;
+}
+a.head-nav-item  .footer{
+	display:block;overflow:hidden;border:0px;
+	width:5px;height:29px;line-height:29px;position:absolute;
+	bottom:0px;right:0px;
+	/* ie6 */_bottom:-1px;_right:-1px;
+	background:#FFF;
+}
+a.head-nav-item:hover{
+	color:#FFF;
+	background:url('../img/head-nav-item-active.gif') no-repeat  left;
+	
+}
+a.head-nav-item:hover .footer{
+	background:url('../img/head-nav-item-active.gif') no-repeat  right;
+}
+.head-nav a.split{
+	width:2px;margin:0px;padding:0px;
+	background:url('../img/icons.gif') 0px 0px;
+}
+
+.head-logo{
+	width:213px;height:71px;position:absolute;left:15px;top:26px;
+}
+.languagebar{
+	height:20px;line-height:20px;color:#a1a1a1;text-align:right;font-size:12px;
+}
+.container{
+	width:840px;height;auto;margin:0px auto;position:relative;
+}
+
+

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=gbk" http-equiv="Content-Type"/>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+        *{color: #838383}
+        body {
+            font-size: 12px;
+            width:382px;
+            height: 200px;
+            overflow: hidden;
+            margin:0px;padding:0px;
+        }
+        .wrap{
+            padding: 9px 0px 0px 15px;
+            height:100%;
+        }
+        .wrap table{padding:0px;margin:0px}
+        .wrap table tr{padding:0px;margin:0px; list-style: none;height: 30px; line-height: 30px;}
+        .wrap input{ width:110px;height:21px;background: #FFF;border:1px solid #d7d7d7;padding: 0px; margin: 0px; }
+        td.spe input{width:78px;}
+        td.spe span{width:75px;line-height:30px;display:block;float:left}
+
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <table>
+        <tr>
+           <td width="180"> <span>行数：</span>
+            <input type="text" id="rowCount"/></td>
+            <td><span>宽度：</span>
+            <input type="text" id="tableWidth"/> px</td>
+        </tr>
+        <tr>
+            <td><span>列数：</span>
+            <input type="text" id="colCount"/></td>
+            <td><span>高度：</span>
+            <input type="text" id="tableHeight"/> px</td>
+        </tr>
+        <tr>
+            <td class="spe"><span>单元格边框：</span>
+            
+                <input type="text" id="cellborder"/>
+            </td>
+            <td><span>间距：</span>
+            <input type="text" id="cellspacing"/></td>
+        </tr>
+        <tr>
+            <td class="spe"><span>表格边框：</span>
+                <input type="text" id="border"/>
+            </td>
+            <td><span>边距：</span>            
+                <input type="text" id="cellpadding"/>
+            </td>
+        </tr>
+        <tr>
+            <td><span>对齐方式：</span>
+            
+                <select id="alignment">
+                    <option value="">无</option>
+                    <option value="left">左对齐</option>
+                    <option value="center">居中</option>
+                    <option value="right">右对齐</option>
+                </select>
+            </td>
+            <td> </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    function g(id){
+        return document.getElementById(id);
+    }
+    //检查数字
+    function checkNum(num){
+        return /^\d+/.test(num);
+    }
+    dialog.onok = function(){
+        var rows = g("rowCount").value,
+            cols = g("colCount").value,
+            width = g("tableWidth").value,
+            height = g("tableHeight").value,
+            border = g("border").value,
+            cellborder = g("cellborder").value,
+            cellspacing = g("cellspacing").value,
+            cellpadding = g("cellpadding").value,
+            align = g("alignment").value;
+        if(!/^(([1-9]+)|([1-9]+\d*))/.test(rows)){
+            alert("请输入正确行数");
+            return false;
+        }
+        if(!/^(([1-9]+)|([1-9]+\d*))/.test(cols)){
+            alert("请输入正确列数");
+            return false;
+        }
+        if(width && !checkNum(width)){
+            alert("宽度输入不正确");
+            return false;
+        }
+        if(height && !checkNum(height)){
+            alert("高度输入不正确");
+            return false;
+        }
+        if(border && !checkNum(border)){
+            alert("表格边框输入不正确");
+            return false;
+        }
+        if(cellborder && !checkNum(cellborder)){
+            alert("单元格边框输入不正确");
+            return false;
+        }
+        if(cellspacing && !checkNum(cellspacing)){
+            alert("间距输入不正确");
+            return false;
+        }
+        if(cellpadding && !checkNum(cellpadding)){
+            alert("边距输入不正确");
+            return false;
+        }
+        var table = {
+            numRows : rows,
+            numCols : cols,
+            border : border,
+            cellborder : cellborder,
+            cellpadding : cellpadding,
+            cellspacing : cellspacing,
+            width : width,
+            height : height,
+            align : align
+        };
+        editor.execCommand('inserttable',table );
+    }
+</script>
+</body>
+</html>

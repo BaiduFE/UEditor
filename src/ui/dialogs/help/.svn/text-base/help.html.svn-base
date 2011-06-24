@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=gbk" http-equiv="Content-Type"/>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+      
+        .head .tab-current{
+            background-color:#7DEBFF;
+        }
+        .hide{
+            display:none;
+        }
+        *{color: #838383}
+        body {
+
+            font-size: 12px;
+            width:380px;
+            height: 240px;
+            overflow: hidden;
+            margin:0px;padding:0px;
+        }
+        .warp{
+            padding: 39px 0px 0px 15px;
+            height:100%;position:relative;
+        }
+        .head{position:absolute;height:31px;top:10px;}
+        .content{height:190px;border: 1px solid #ddd;clear:both;padding:5px;overflow: auto}
+
+        .head span{width:62px;height:29px;line-height:29px;background:red;display:block;float: left;text-align: center;margin-right: 1px;cursor: pointer }
+        .head span.def{background:url("../../../../examples/resources/images/dialog-title-bg.png") repeat-x;border:1px solid #ccc;}
+        .head span.act{background:#FFF;border:1px solid #ccc;border-bottom: 1px solid #FFF}
+
+         .content table{width:100%;line-height: 20px}
+        .content table thead{font-weight: bold;line-height: 25px;}
+    </style>
+</head>
+<body>
+<div class="warp">
+    <div id="head" class="head">
+        <span class="act" onclick="toggle(0)">pr</span>
+        <span class="def" onclick="toggle(1)">快捷键</span>
+    </div>
+    <div class="content">
+        <div id="cont0">
+
+
+            <h2>About TinyMCE</h2>
+            <p>Version: 3.4.3.1 (2011-06-16)</p>
+
+<p>TinyMCE is a platform independent web based Javascript HTML WYSIWYG editor control released as Open Source under LGPL by Moxiecode Systems AB. It has the ability to convert HTML TEXTAREA fields or other HTML elements to editor instances.</p>
+
+<p>Copyright @ 2003-2008, Moxiecode Systems AB, All rights reserved.</p>
+
+<p>For more information about this software visit the TinyMCE website.</p>
+
+
+
+
+
+        </div>
+        <div id="cont1" class="hide">
+            <table>
+                <thead>
+                <tr>
+                    <td>快捷键</td>
+                    <td>功能</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>ctrl+b</td>
+                    <td>给选中字设置为加粗</td>
+                </tr>
+                <tr>
+                    <td>ctrl+c</td>
+                    <td>复制选中内容</td>
+                </tr>
+                <tr>
+                    <td>ctrl+x</td>
+                    <td>剪切选中内容</td>
+                </tr>
+                <tr>
+                    <td>ctrl+v</td>
+                    <td>粘贴</td>
+                </tr>
+                <tr>
+                    <td>ctrl+y</td>
+                    <td>重新执行上次操作</td>
+                </tr>
+                <tr>
+                    <td>ctrl+z</td>
+                    <td>撤销上一次操作</td>
+                </tr>
+                <tr>
+                    <td>ctrl+i</td>
+                    <td>给选中字设置为斜体</td>
+                </tr>
+                <tr>
+                    <td>ctrl+u</td>
+                    <td>给选中字加下划线</td>
+                </tr>
+                <tr>
+                    <td>ctrl+a</td>
+                    <td>全部选中</td>
+                </tr>
+                <tr>
+                    <td>ctrl+shift+c</td>
+                    <td>清除页面文字格式</td>
+                </tr>
+                <tr>
+                    <td>ctrl+shift+l</td>
+                    <td>页面文字居左显示</td>
+                </tr>
+                <tr>
+                    <td>ctrl+shift+r</td>
+                    <td>页面文字居右显示</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function jbind(obj,evt,fun){
+        if(obj.addEventListener){  // firefox,w3c
+            obj.addEventListener(evt,fun,false);
+        }else{// ie
+            obj.attachEvent("on"+evt,function(){fun.apply(obj);});
+        }
+    }
+    function getChildrenByClassName (parentClass,childtag){
+        var divs = document.getElementsByTagName("div"),i=0,headChilds,j=0,arr = [];
+        for(;i<divs.length;i++){
+            if(divs[i].className == parentClass){
+                headChilds = divs[i].childNodes;
+            }
+        }
+        for(;j<headChilds.length;j++){
+            if(new RegExp(childtag,"i").test(headChilds[j].tagName)){
+                arr.push(headChilds[j]);
+            }
+        }
+        return arr;
+    }
+     function hideAll (){
+        var tabs = getChildrenByClassName("head","span"),
+            contents = getChildrenByClassName("content","div"),i=0;
+        for(;i<tabs.length;i++){
+            tabs[i].className = "";
+            contents[i].className = "hide";
+        }
+     }
+    function toggle (i){
+        hideAll();
+        var tabs = getChildrenByClassName("head","span"),
+            contents = getChildrenByClassName("content","div");
+          for(var s=0;s<tabs.length;s++){
+             tabs[s].className = "def";
+          }
+
+        tabs[i].className = "act";
+        contents[i].className = "";
+    }
+</script>
+</body>
+</html>

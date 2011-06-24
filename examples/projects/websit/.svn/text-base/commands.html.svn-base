@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>05-commands</title>
+<link rel="stylesheet" href="css/commands.css" type="text/css">
+</head>
+<body>
+
+    <div class="head"></div>
+    <div class="con-warp">
+    <div class="con">
+       
+        <div class="con-body">
+            <h3 class="f30">Commands</h3>
+            <table class="con-table" cellPadding="10" cellSpacing="1">
+                    <tr class="thead">
+                        <td width="162">类</td>
+                        <td width="169">命令</td>
+                        <td width="169">参数</td>
+                        <td>功能说明</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    <tr>
+                        <td class="C2b">bold</td>
+                        <td>execCommand(cmdName)</td>
+                        <td >cmdName="bold"</td>
+                        <td class="Tal">切换选区文本的粗体样式，若选区闭合（即插入符状态）效果参考word</td>
+                    </tr>
+                    
+            </table>
+            <h3 class="f30">Remark</h3>
+            <p class="f11">
+                若上表中指出命令需要传参数，则请在调用execCommand时第二个参数给出（和浏览器原生的不太一样）， 若上表指出命令参数有对于上表中未列出的command会自动调用<a class="link" href="#">浏览器原生的execComand</a>处理。
+            </p>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>
+
+

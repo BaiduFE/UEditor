@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom
+END
+Range.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Range.html
+END
+Range.applyInlineStyle.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Range.applyInlineStyle.html
+END
+Range.extractContent.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Range.extractContent.html
+END
+Selection.getStart.html
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Selection.getStart.html
+END
+DOMUtils.Text.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/DOMUtils.Text.html
+END
+DOMUtils.Node.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/DOMUtils.Node.html
+END
+IERangeTransform.html
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/IERangeTransform.html
+END
+DOMUtils.Element.html
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/DOMUtils.Element.html
+END
+Range.removeInlineStyle.html
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Range.removeInlineStyle.html
+END
+Range.select.html
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/public/ge/!svn/ver/6694/trunk/editor/ueditor_1_0/test/case/core/dom/Range.select.html
+END
